@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/Button'
 import { useMeditationStore } from '@/stores/meditationStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useChatSession, useChats } from '@/hooks/useChat'
+import { useChatStore } from '@/stores/chatStore'
+import { MeditationService } from '@/services/meditationService'
 import { MEDITATION_CONFIG } from '@/lib/constants'
 import type { MeditationTab, MeditationCategory } from '@/types'
 import styles from '@/styles/pages/MeditationsPage.module.css'
@@ -12,6 +15,13 @@ import styles from '@/styles/pages/MeditationsPage.module.css'
 export function MeditationsPage(): React.ReactElement {
   const { user } = useAuth()
   const { isDark } = useTheme()
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generateError, setGenerateError] = useState<string | null>(null)
+  
+  // Chat data
+  const currentChatId = useChatStore((state) => state.currentChatId)
+  const { messages } = useChatSession(currentChatId || undefined)
+  const { data: chats } = useChats()
   
   // Meditation store state
   const activeTab = useMeditationStore((state) => state.activeTab)
@@ -38,10 +48,34 @@ export function MeditationsPage(): React.ReactElement {
     { id: 'progress', label: 'Progress', icon: '📊' }
   ]
 
-  const handleGenerateMeditation = () => {
-    // This will be implemented with OpenAI integration
-    console.log('Generate meditation based on recent therapy sessions')
+  const handleGenerateMeditation = async () => {
+    if (!user || !messages || messages.length === 0) {
+      setGenerateError('Please have a conversation with your therapist first')
+      return
+    }
+
+    setIsGenerating(true)
+    setGenerateError(null)
+
+    try {
+      await MeditationService.generateAndStore(
+        messages, 
+        user.therapist_tone
+      )
+      
+      // Success! The meditation is now in the store
+      console.log('Successfully generated personalized meditation')
+      
+    } catch (error) {
+      console.error('Failed to generate meditation:', error)
+      setGenerateError(error instanceof Error ? error.message : 'Failed to generate meditation')
+    } finally {
+      setIsGenerating(false)
+    }
   }
+
+  // Check if meditation can be suggested
+  const canSuggestMeditation = messages && MeditationService.shouldSuggestMeditation(messages)
 
   return (
     <div className={styles.container}>
@@ -159,15 +193,35 @@ export function MeditationsPage(): React.ReactElement {
                 <div className={styles.personalizedHeader}>
                   <h3>Personalized Meditations</h3>
                   <p>Meditations created just for you based on your therapy conversations</p>
+                  
+                  {canSuggestMeditation && (
+                    <div className={styles.suggestionBanner}>
+                      <span>💫</span>
+                      <span>{MeditationService.getMeditationSuggestionMessage()}</span>
+                    </div>
+                  )}
                 </div>
 
                 <Button 
                   onClick={handleGenerateMeditation}
+                  disabled={isGenerating || !messages || messages.length === 0}
                   className={styles.generateButton}
                 >
                   <span>✨</span>
-                  Generate New Meditation
+                  {isGenerating ? 'Generating...' : 'Generate New Meditation'}
                 </Button>
+
+                {generateError && (
+                  <div className={styles.errorMessage}>
+                    <span>⚠️ {generateError}</span>
+                  </div>
+                )}
+
+                {!messages || messages.length === 0 && (
+                  <div className={styles.infoMessage}>
+                    <span>💬 Start a conversation with your therapist to generate personalized meditations</span>
+                  </div>
+                )}
               </div>
 
               {/* Generated Meditations */}

@@ -194,19 +194,18 @@ export const useMeditationStore = create<MeditationState>()(
       },
       
       setBackgroundSound: (sound) => {
-        set(state => {
-          const updatedPlayer: MeditationPlayerState = {
-            ...state.player,
-            backgroundSound: sound
-          }
-          
-          return {
-            player: updatedPlayer,
+        set((state) => {
+          const newState: Partial<MeditationState> = {
+            player: {
+              ...state.player,
+              backgroundSound: sound
+            },
             preferences: {
               ...state.preferences,
               defaultBackgroundSound: sound
             }
           }
+          return newState
         })
       },
       
