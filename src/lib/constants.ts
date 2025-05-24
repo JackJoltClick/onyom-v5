@@ -1,4 +1,4 @@
-import type { TherapistPersonality, TherapistTone } from '@/types'
+import type { TherapistPersonality, TherapistTone, Meditation, MeditationCategory } from '@/types'
 
 /**
  * App configuration constants
@@ -201,4 +201,154 @@ export const SUCCESS_MESSAGES = {
     saved: 'Settings saved successfully.',
     themeChanged: 'Theme preference updated.',
   },
-} as const 
+} as const
+
+/**
+ * Meditation configuration
+ */
+export const MEDITATION_CONFIG = {
+  categories: {
+    mindfulness: {
+      name: 'Mindfulness',
+      description: 'Present moment awareness and acceptance',
+      icon: '🧘',
+      color: '#4F46E5'
+    },
+    'anxiety-relief': {
+      name: 'Anxiety Relief',
+      description: 'Calming practices for anxious thoughts',
+      icon: '😌',
+      color: '#059669'
+    },
+    sleep: {
+      name: 'Sleep',
+      description: 'Relaxation for better rest',
+      icon: '🌙',
+      color: '#7C3AED'
+    },
+    focus: {
+      name: 'Focus',
+      description: 'Concentration and clarity practices',
+      icon: '🎯',
+      color: '#DC2626'
+    },
+    'self-compassion': {
+      name: 'Self-Compassion',
+      description: 'Loving-kindness towards yourself',
+      icon: '💝',
+      color: '#EC4899'
+    },
+    'body-scan': {
+      name: 'Body Scan',
+      description: 'Progressive relaxation techniques',
+      icon: '🫧',
+      color: '#0891B2'
+    },
+    breathing: {
+      name: 'Breathing',
+      description: 'Focused breathwork exercises',
+      icon: '🫁',
+      color: '#65A30D'
+    },
+    'stress-relief': {
+      name: 'Stress Relief',
+      description: 'Techniques for managing daily stress',
+      icon: '🌊',
+      color: '#0284C7'
+    },
+    'loving-kindness': {
+      name: 'Loving Kindness',
+      description: 'Compassion for self and others',
+      icon: '❤️',
+      color: '#BE185D'
+    }
+  } as Record<MeditationCategory, { name: string; description: string; icon: string; color: string }>,
+  
+  defaultDurations: [5, 10, 15, 20, 30, 45] as const,
+  
+  backgroundSounds: {
+    rain: { name: 'Rain', icon: '🌧️' },
+    ocean: { name: 'Ocean Waves', icon: '🌊' },
+    forest: { name: 'Forest', icon: '🌲' },
+    birds: { name: 'Birds', icon: '🐦' },
+    silence: { name: 'Silence', icon: '🔇' }
+  }
+} as const
+
+/**
+ * Sample meditation library
+ */
+export const SAMPLE_MEDITATIONS: Meditation[] = [
+  {
+    id: '1',
+    title: 'Morning Mindfulness',
+    description: 'Start your day with intention and awareness. A gentle practice to center yourself.',
+    duration_minutes: 10,
+    category: 'mindfulness',
+    difficulty_level: 'beginner',
+    script_text: 'Welcome to your morning mindfulness practice. Find a comfortable position...',
+    instructor: 'Sarah Chen',
+    tags: ['morning', 'beginners', 'daily'],
+    created_at: '2024-01-15T08:00:00Z'
+  },
+  {
+    id: '2',
+    title: 'Anxiety Release',
+    description: 'A calming meditation to help release anxious thoughts and find peace.',
+    duration_minutes: 15,
+    category: 'anxiety-relief',
+    difficulty_level: 'beginner',
+    script_text: 'Take a moment to notice where you are. Notice any anxiety in your body...',
+    instructor: 'Dr. Michael Torres',
+    tags: ['anxiety', 'calm', 'breathing'],
+    created_at: '2024-01-16T14:30:00Z'
+  },
+  {
+    id: '3',
+    title: 'Deep Sleep Journey',
+    description: 'Drift into peaceful sleep with this guided relaxation practice.',
+    duration_minutes: 20,
+    category: 'sleep',
+    difficulty_level: 'beginner',
+    script_text: 'As you settle into bed, allow your body to fully relax...',
+    instructor: 'Luna Rodriguez',
+    tags: ['sleep', 'relaxation', 'evening'],
+    created_at: '2024-01-17T21:00:00Z'
+  },
+  {
+    id: '4',
+    title: 'Focus & Clarity',
+    description: 'Sharpen your concentration and clear mental fog with this practice.',
+    duration_minutes: 12,
+    category: 'focus',
+    difficulty_level: 'intermediate',
+    script_text: 'Sit upright with your spine straight. We will practice single-pointed focus...',
+    instructor: 'James Kim',
+    tags: ['concentration', 'productivity', 'clarity'],
+    created_at: '2024-01-18T09:15:00Z'
+  },
+  {
+    id: '5',
+    title: 'Self-Compassion Practice',
+    description: 'Cultivate kindness towards yourself with this heart-opening meditation.',
+    duration_minutes: 18,
+    category: 'self-compassion',
+    difficulty_level: 'intermediate',
+    script_text: 'Place your hand on your heart. Feel the warmth and rhythm...',
+    instructor: 'Dr. Elena Vasquez',
+    tags: ['self-love', 'healing', 'emotions'],
+    created_at: '2024-01-19T16:45:00Z'
+  },
+  {
+    id: '6',
+    title: 'Full Body Scan',
+    description: 'Progressive relaxation from head to toe, releasing tension everywhere.',
+    duration_minutes: 25,
+    category: 'body-scan',
+    difficulty_level: 'beginner',
+    script_text: 'Begin by noticing the top of your head. Scan slowly down...',
+    instructor: 'David Park',
+    tags: ['relaxation', 'tension-release', 'body-awareness'],
+    created_at: '2024-01-20T12:00:00Z'
+  }
+] 
