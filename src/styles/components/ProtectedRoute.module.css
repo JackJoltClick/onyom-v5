@@ -1,0 +1,75 @@
+.loadingContainer {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 768px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.headerSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-primary);
+  margin-bottom: 1rem;
+}
+
+.contentSkeleton {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.bottomNavSkeleton {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-primary);
+  border-radius: 20px 20px 0 0;
+  margin-top: auto;
+}
+
+.navItemSkeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .loadingContent {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .contentSkeleton {
+    gap: 1.5rem;
+  }
+} 

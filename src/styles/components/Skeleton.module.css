@@ -1,0 +1,157 @@
+.skeleton {
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  overflow: hidden;
+  
+  /* Default rectangular skeleton */
+  width: 100%;
+  height: 20px;
+}
+
+/* Variants */
+.text {
+  height: 1em;
+  border-radius: 4px;
+  margin-bottom: 0.5em;
+}
+
+.text:last-child {
+  margin-bottom: 0;
+}
+
+.circular {
+  border-radius: 50%;
+}
+
+.rectangular {
+  border-radius: var(--border-radius-sm);
+}
+
+.rounded {
+  border-radius: var(--border-radius);
+}
+
+/* Animations */
+.pulse {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.wave::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: skeleton-wave 1.5s ease-in-out infinite;
+}
+
+.none {
+  /* No animation */
+}
+
+/* Text container for multiple lines */
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.lastLine {
+  width: 75%;
+}
+
+/* Card skeleton layout */
+.card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--border-primary);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cardHeaderText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Keyframe animations */
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes skeleton-wave {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Theme adjustments */
+[data-theme="light"] .skeleton {
+  background: #f3f4f6;
+}
+
+[data-theme="light"] .wave::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 0, 0, 0.08),
+    transparent
+  );
+}
+
+[data-theme="dark"] .skeleton {
+  background: #374151;
+}
+
+[data-theme="dark"] .wave::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+  
+  .cardHeader {
+    gap: 0.75rem;
+  }
+} 

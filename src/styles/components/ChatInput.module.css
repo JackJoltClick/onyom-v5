@@ -1,0 +1,121 @@
+.container {
+  padding: var(--spacing-md);
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  position: relative;
+}
+
+.textarea {
+  flex: 1;
+  min-height: 40px;
+  max-height: 120px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  resize: none;
+  overflow-y: auto;
+  transition: all var(--transition-fast);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--accent-color-light);
+}
+
+.textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.textarea::placeholder {
+  color: var(--text-color-muted);
+}
+
+.sendButton {
+  flex-shrink: 0;
+  border-radius: var(--border-radius-full);
+  aspect-ratio: 1;
+  padding: var(--spacing-sm);
+  margin-bottom: 2px;
+}
+
+.sendButton:disabled {
+  opacity: 0.4;
+}
+
+.counter {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-muted);
+  text-align: right;
+  margin-top: var(--spacing-xs);
+  padding-right: 48px; /* Account for send button width */
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-sm);
+    padding-bottom: calc(var(--spacing-sm) + var(--safe-area-inset-bottom));
+  }
+  
+  .textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: var(--spacing-sm);
+  }
+  
+  .inputWrapper {
+    gap: var(--spacing-xs);
+  }
+}
+
+/* Focus states for accessibility */
+.sendButton:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Animation for send button */
+.sendButton svg {
+  transition: transform var(--transition-fast);
+}
+
+.sendButton:hover:not(:disabled) svg {
+  transform: translateX(1px);
+}
+
+/* Scrollbar styling for textarea */
+.textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.textarea::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--border-radius-full);
+}
+
+.textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--border-color-light);
+} 
