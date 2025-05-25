@@ -1,116 +1,291 @@
+/* ================================
+   ONYOM BOTTOM NAVIGATION
+   Therapeutic & Mindful Design
+   ================================ */
+
 .container {
+  /* Positioning */
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--bg-primary);
-  border-top: 1px solid var(--border-primary);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
+  z-index: var(--onyom-z-sticky);
+  
+  /* Visual design with glassmorphism */
+  background: var(--onyom-glass-bg);
+  backdrop-filter: var(--onyom-glass-backdrop);
+  border-top: 1px solid var(--onyom-glass-border);
+  
+  /* Safe area support for modern devices */
+  padding-bottom: var(--onyom-safe-bottom);
+  
+  /* Smooth appearance */
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
 }
 
 .content {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0.75rem 1rem;
-  max-width: 600px;
+  padding: var(--onyom-space-3) var(--onyom-space-4);
+  max-width: 500px;
   margin: 0 auto;
 }
 
+/* ================================
+   NAVIGATION ITEMS
+   ================================ */
+
 .navItem {
+  /* Layout */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: var(--onyom-space-1);
+  
+  /* Interactive area */
+  padding: var(--onyom-space-3);
+  border-radius: var(--onyom-radius-lg);
+  min-width: var(--onyom-touch-target);
+  min-height: var(--onyom-touch-target);
+  
+  /* Styling */
+  color: var(--onyom-text-muted);
   text-decoration: none;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  min-width: 60px;
   position: relative;
-  cursor: pointer;
+  
+  /* Smooth interactions */
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
+  
+  /* Focus management */
+  outline: none;
 }
 
 .navItem:hover {
-  color: var(--accent-primary);
-  background: var(--bg-secondary);
+  color: var(--onyom-text-secondary);
+  background-color: var(--onyom-accent-primary-light);
+  transform: translateY(-2px);
 }
 
-.navItem.active {
-  color: var(--accent-primary);
-  background: var(--accent-bg);
+.navItem:focus-visible {
+  outline: 2px solid var(--onyom-accent-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--onyom-accent-primary-light);
 }
+
+.navItem:active {
+  transform: translateY(-1px);
+  transition: transform 0.1s ease-out;
+}
+
+/* ================================
+   ACTIVE STATE
+   ================================ */
+
+.active {
+  color: var(--onyom-accent-primary);
+  background-color: var(--onyom-accent-primary-light);
+  box-shadow: var(--onyom-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--onyom-accent-primary), var(--onyom-sage));
+  border-radius: var(--onyom-radius-pill);
+  box-shadow: 0 0 8px var(--onyom-accent-primary);
+}
+
+.active:hover {
+  color: var(--onyom-accent-primary);
+  background-color: var(--onyom-accent-primary-light);
+  transform: translateY(-1px);
+}
+
+/* ================================
+   ICON & LABEL STYLING
+   ================================ */
 
 .icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
-  transition: transform 0.2s ease;
+  font-size: var(--onyom-text-xl);
+  line-height: 1;
+  transition: transform var(--onyom-duration-normal) var(--onyom-ease-out);
 }
 
 .navItem:hover .icon {
   transform: scale(1.1);
 }
 
-.navItem.active .icon {
-  transform: scale(1.1);
-  filter: drop-shadow(0 2px 4px rgba(var(--accent-primary-rgb), 0.3));
+.active .icon {
+  transform: scale(1.05);
+  filter: drop-shadow(0 2px 4px rgba(105, 152, 176, 0.3));
 }
 
 .label {
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: var(--onyom-text-xs);
+  font-weight: var(--onyom-font-weight-medium);
+  font-family: var(--onyom-font-family-primary);
   text-align: center;
-  white-space: nowrap;
+  line-height: var(--onyom-leading-tight);
+  letter-spacing: 0.025em;
+  
+  /* Gentle text transitions */
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
 }
 
-/* Active indicator */
-.navItem.active::after {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 24px;
-  height: 2px;
-  background: var(--accent-primary);
-  border-radius: 2px;
+.active .label {
+  font-weight: var(--onyom-font-weight-semibold);
 }
 
-/* Dark theme adjustments */
-.dark .container {
-  background: rgba(var(--bg-primary-rgb), 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* ================================
+   BREATHING ANIMATION FOR MEDITATION
+   ================================ */
+
+.navItem[href*="meditations"] .icon {
+  animation: nav-breathe 4s var(--onyom-ease-breath) infinite;
 }
 
-/* Mobile optimizations */
-@media (max-width: 768px) {
+@keyframes nav-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 480px) {
   .content {
-    padding: 0.5rem 0.5rem;
+    padding: var(--onyom-space-2) var(--onyom-space-3);
   }
   
   .navItem {
-    padding: 0.5rem;
-    min-width: 50px;
+    padding: var(--onyom-space-2);
+    min-width: var(--onyom-touch-target);
   }
   
   .icon {
-    font-size: 1.25rem;
-    margin-bottom: 0.125rem;
+    font-size: var(--onyom-text-lg);
   }
   
   .label {
-    font-size: 0.625rem;
+    font-size: 11px;
   }
 }
 
-/* iPhone safe area handling */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
+/* ================================
+   LANDSCAPE ORIENTATION
+   ================================ */
+
+@media (orientation: landscape) and (max-height: 500px) {
   .container {
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    padding-bottom: max(var(--onyom-safe-bottom), var(--onyom-space-2));
   }
+  
+  .content {
+    padding: var(--onyom-space-2) var(--onyom-space-4);
+  }
+  
+  .navItem {
+    gap: var(--onyom-space-1);
+  }
+  
+  .label {
+    font-size: 10px;
+  }
+}
+
+/* ================================
+   HIGH CONTRAST MODE
+   ================================ */
+
+@media (prefers-contrast: high) {
+  .container {
+    border-top-width: 2px;
+    border-top-color: var(--onyom-text-primary);
+  }
+  
+  .navItem {
+    border: 1px solid transparent;
+  }
+  
+  .active {
+    border-color: var(--onyom-accent-primary);
+  }
+  
+  .active::before {
+    height: 4px;
+  }
+}
+
+/* ================================
+   REDUCED MOTION SUPPORT
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .container,
+  .navItem,
+  .icon,
+  .label {
+    transition: none;
+  }
+  
+  .navItem:hover,
+  .navItem:active,
+  .active {
+    transform: none;
+  }
+  
+  .navItem:hover .icon,
+  .active .icon {
+    transform: none;
+  }
+  
+  .navItem[href*="meditations"] .icon {
+    animation: none;
+  }
+}
+
+/* ================================
+   DARK MODE ENHANCEMENTS
+   ================================ */
+
+[data-theme="dark"] .container {
+  background: rgba(21, 26, 35, 0.85);
+  border-top-color: rgba(236, 240, 243, 0.1);
+}
+
+/* ================================
+   LIGHT MODE ADJUSTMENTS
+   ================================ */
+
+[data-theme="light"] .container {
+  background: rgba(253, 252, 251, 0.85);
+  border-top-color: rgba(45, 55, 72, 0.15);
+}
+
+[data-theme="light"] .navItem {
+  color: #6B7280;
+}
+
+[data-theme="light"] .navItem:hover {
+  color: var(--onyom-light-text-secondary);
+  background-color: rgba(105, 152, 176, 0.08);
+}
+
+[data-theme="light"] .active {
+  color: var(--onyom-accent-primary);
+  background-color: rgba(105, 152, 176, 0.08);
 } 

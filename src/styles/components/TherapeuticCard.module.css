@@ -1,0 +1,299 @@
+/* ================================
+   ONYOM THERAPEUTIC CARD
+   Flexible card component with therapeutic design variants
+   ================================ */
+
+.card {
+  /* Base structure */
+  position: relative;
+  border-radius: var(--onyom-radius-xl);
+  
+  /* Smooth interactions */
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
+  
+  /* Focus management */
+  outline: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--onyom-accent-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--onyom-accent-primary-light);
+}
+
+/* ================================
+   VARIANTS
+   ================================ */
+
+/* Default - Simple elevated surface */
+.default {
+  background-color: var(--onyom-bg-elevated);
+  border: 1px solid var(--onyom-border-subtle);
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.default:hover {
+  border-color: var(--onyom-border-soft);
+  box-shadow: var(--onyom-shadow-base);
+}
+
+/* Glass - Glassmorphism effect */
+.glass {
+  background: var(--onyom-glass-bg);
+  backdrop-filter: var(--onyom-glass-backdrop);
+  border: 1px solid var(--onyom-glass-border);
+  box-shadow: var(--onyom-shadow-xs);
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--onyom-border-soft);
+  box-shadow: var(--onyom-shadow-base);
+}
+
+/* Elevated - Higher elevation for prominence */
+.elevated {
+  background-color: var(--onyom-bg-elevated);
+  border: 1px solid var(--onyom-border-soft);
+  box-shadow: var(--onyom-shadow-lg);
+}
+
+.elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-xl);
+  border-color: var(--onyom-border-medium);
+}
+
+/* Floating - Maximum elevation with subtle glow */
+.floating {
+  background-color: var(--onyom-bg-elevated);
+  border: 1px solid var(--onyom-border-soft);
+  box-shadow: var(--onyom-shadow-xl);
+  backdrop-filter: blur(8px);
+}
+
+.floating:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--onyom-shadow-xl), var(--onyom-shadow-glow);
+  border-color: var(--onyom-accent-primary);
+}
+
+/* ================================
+   PADDING VARIANTS
+   ================================ */
+
+.padding-sm {
+  padding: var(--onyom-space-4);
+}
+
+.padding-md {
+  padding: var(--onyom-space-6);
+}
+
+.padding-lg {
+  padding: var(--onyom-space-8);
+}
+
+.padding-xl {
+  padding: var(--onyom-space-12);
+}
+
+/* ================================
+   EFFECTS
+   ================================ */
+
+/* Breathing animation - For meditation contexts */
+.breathe {
+  animation: card-breathe 4s var(--onyom-ease-breath) infinite;
+}
+
+@keyframes card-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--onyom-shadow-sm);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: var(--onyom-shadow-base);
+  }
+}
+
+/* Gentle glow - For attention/status */
+.glow {
+  animation: card-glow 3s ease-in-out infinite;
+}
+
+@keyframes card-glow {
+  0%, 100% {
+    box-shadow: var(--onyom-shadow-sm);
+  }
+  50% {
+    box-shadow: var(--onyom-shadow-lg), 0 0 20px var(--onyom-accent-primary-light);
+  }
+}
+
+/* Pulse - For notifications/alerts */
+.pulse {
+  animation: card-pulse 2s ease-in-out infinite;
+}
+
+@keyframes card-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.01);
+  }
+}
+
+/* ================================
+   INTERACTIVE STATES
+   ================================ */
+
+.interactive {
+  cursor: pointer;
+  user-select: none;
+}
+
+.interactive:hover {
+  transform: translateY(-2px);
+}
+
+.interactive:active {
+  transform: translateY(-1px);
+  transition: transform 0.1s ease-out;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ================================
+   SPECIAL COMBINATIONS
+   ================================ */
+
+/* Interactive glass cards */
+.interactive.glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Interactive floating cards */
+.interactive.floating:hover {
+  transform: translateY(-6px) scale(1.01);
+}
+
+/* Breathing glass effect */
+.breathe.glass {
+  animation: glass-breathe 4s var(--onyom-ease-breath) infinite;
+}
+
+@keyframes glass-breathe {
+  0%, 100% {
+    background: var(--onyom-glass-bg);
+    border-color: var(--onyom-glass-border);
+  }
+  50% {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--onyom-border-soft);
+  }
+}
+
+/* ================================
+   THEME VARIATIONS
+   ================================ */
+
+[data-theme="light"] .default {
+  background-color: var(--onyom-light-bg-elevated);
+  border-color: var(--onyom-light-border-subtle);
+}
+
+[data-theme="light"] .elevated {
+  background-color: var(--onyom-light-bg-elevated);
+  border-color: rgba(45, 55, 72, 0.12);
+}
+
+[data-theme="light"] .floating {
+  background-color: var(--onyom-light-bg-elevated);
+  border-color: rgba(45, 55, 72, 0.15);
+}
+
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ================================
+   ACCESSIBILITY
+   ================================ */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  .glass {
+    background: var(--onyom-bg-elevated);
+    backdrop-filter: none;
+  }
+  
+  .interactive:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: box-shadow var(--onyom-duration-fast) ease-out;
+  }
+  
+  .interactive:hover,
+  .interactive:active,
+  .elevated:hover,
+  .floating:hover {
+    transform: none;
+  }
+  
+  .breathe,
+  .glow,
+  .pulse,
+  .glass-breathe {
+    animation: none;
+  }
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 768px) {
+  .padding-lg {
+    padding: var(--onyom-space-6);
+  }
+  
+  .padding-xl {
+    padding: var(--onyom-space-8);
+  }
+  
+  .interactive.floating:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  .interactive:hover {
+    transform: none;
+  }
+  
+  .interactive:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
+  }
+} 

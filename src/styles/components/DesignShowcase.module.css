@@ -1,0 +1,482 @@
+/* ================================
+   ONYOM DESIGN SHOWCASE
+   Demonstration of Therapeutic Design System
+   ================================ */
+
+.showcase {
+  min-height: 100vh;
+  background: var(--onyom-bg-deep);
+  color: var(--onyom-text-primary);
+  font-family: var(--onyom-font-family-primary);
+  padding: var(--onyom-space-8) var(--onyom-space-4);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ================================
+   HEADER
+   ================================ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--onyom-space-16);
+  padding-bottom: var(--onyom-space-8);
+  border-bottom: 1px solid var(--onyom-border-subtle);
+}
+
+.titleSection {
+  flex: 1;
+}
+
+.title {
+  font-size: var(--onyom-text-5xl);
+  font-weight: var(--onyom-font-weight-bold);
+  background: linear-gradient(135deg, var(--onyom-accent-primary) 0%, var(--onyom-sage) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: var(--onyom-space-2);
+}
+
+.subtitle {
+  font-size: var(--onyom-text-xl);
+  color: var(--onyom-text-secondary);
+  margin: 0;
+}
+
+.themeSwitcher {
+  display: flex;
+  gap: var(--onyom-space-2);
+  background: var(--onyom-bg-surface);
+  padding: var(--onyom-space-2);
+  border-radius: var(--onyom-radius-pill);
+  border: 1px solid var(--onyom-border-subtle);
+}
+
+/* ================================
+   SECTIONS
+   ================================ */
+
+.section {
+  margin-bottom: var(--onyom-space-16);
+}
+
+.sectionTitle {
+  font-size: var(--onyom-text-3xl);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-8);
+  color: var(--onyom-text-primary);
+}
+
+/* ================================
+   COLOR PALETTE
+   ================================ */
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--onyom-space-8);
+}
+
+.colorGroup {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-subtle);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-6);
+}
+
+.colorGroupTitle {
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-4);
+  color: var(--onyom-text-primary);
+}
+
+.colorSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-2);
+  padding: var(--onyom-space-4);
+  border-radius: var(--onyom-radius-lg);
+  margin-bottom: var(--onyom-space-3);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: transform var(--onyom-duration-normal) var(--onyom-ease-out);
+}
+
+.colorSwatch:hover {
+  transform: scale(1.02);
+}
+
+.colorSwatch span {
+  font-weight: var(--onyom-font-weight-medium);
+  font-size: var(--onyom-text-sm);
+}
+
+.colorSwatch code {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: var(--onyom-text-xs);
+  opacity: 0.9;
+  background: rgba(0, 0, 0, 0.2);
+  padding: var(--onyom-space-1) var(--onyom-space-2);
+  border-radius: var(--onyom-radius-sm);
+  align-self: flex-start;
+}
+
+/* ================================
+   TYPOGRAPHY
+   ================================ */
+
+.typographyGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-6);
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-subtle);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-8);
+}
+
+.typographyGrid h1,
+.typographyGrid h2,
+.typographyGrid h3,
+.typographyGrid h4,
+.typographyGrid h5,
+.typographyGrid h6 {
+  margin: 0;
+}
+
+.typographyGrid p {
+  margin: 0;
+}
+
+.typographyGrid .large {
+  font-size: var(--onyom-text-lg);
+  color: var(--onyom-text-primary);
+}
+
+.typographyGrid .small {
+  font-size: var(--onyom-text-sm);
+  color: var(--onyom-text-muted);
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--onyom-space-8);
+}
+
+.buttonGroup {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-subtle);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-6);
+}
+
+.buttonGroup h3 {
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-4);
+  color: var(--onyom-text-primary);
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--onyom-space-3);
+}
+
+/* ================================
+   CARDS
+   ================================ */
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--onyom-space-8);
+}
+
+.cardRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--onyom-space-6);
+  margin-bottom: var(--onyom-space-6);
+}
+
+.cardRow:last-child {
+  margin-bottom: 0;
+}
+
+.cardRow h3 {
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-3);
+  color: var(--onyom-text-primary);
+}
+
+.cardRow p {
+  color: var(--onyom-text-secondary);
+  margin: 0;
+  line-height: var(--onyom-leading-relaxed);
+}
+
+/* ================================
+   GLASSMORPHISM
+   ================================ */
+
+.glassGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--onyom-space-8);
+}
+
+.glassCard {
+  padding: var(--onyom-space-6);
+  border-radius: var(--onyom-radius-xl);
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
+}
+
+.glassCard:hover {
+  transform: translateY(-2px);
+}
+
+.glassCard h3 {
+  font-size: var(--onyom-text-xl);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-3);
+  color: var(--onyom-text-primary);
+}
+
+.glassCard p {
+  color: var(--onyom-text-secondary);
+  margin-bottom: var(--onyom-space-4);
+}
+
+/* ================================
+   ANIMATIONS
+   ================================ */
+
+.animationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--onyom-space-6);
+}
+
+.animationDemo {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-subtle);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-6);
+  text-align: center;
+  cursor: pointer;
+}
+
+.animationDemo h3 {
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-3);
+  color: var(--onyom-text-primary);
+}
+
+.animationDemo p {
+  color: var(--onyom-text-secondary);
+  margin: 0;
+}
+
+/* ================================
+   ACCESSIBILITY
+   ================================ */
+
+.accessibilityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--onyom-space-6);
+}
+
+.accessibilityItem {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-subtle);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-6);
+}
+
+.accessibilityItem h3 {
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-3);
+  color: var(--onyom-text-primary);
+}
+
+.accessibilityItem p {
+  color: var(--onyom-text-secondary);
+  margin-bottom: var(--onyom-space-4);
+}
+
+.motionNote {
+  font-size: var(--onyom-text-sm);
+  color: var(--onyom-text-muted);
+  font-style: italic;
+  background: var(--onyom-bg-elevated);
+  padding: var(--onyom-space-3);
+  border-radius: var(--onyom-radius-base);
+  border-left: 3px solid var(--onyom-accent-primary);
+}
+
+/* ================================
+   DESIGN PRINCIPLES
+   ================================ */
+
+.principlesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--onyom-space-6);
+}
+
+.principle {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-subtle);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-6);
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
+}
+
+.principle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-lg);
+  border-color: var(--onyom-border-soft);
+}
+
+.principle h3 {
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-weight-semibold);
+  margin-bottom: var(--onyom-space-3);
+  color: var(--onyom-text-primary);
+}
+
+.principle p {
+  color: var(--onyom-text-secondary);
+  margin: 0;
+  line-height: var(--onyom-leading-relaxed);
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 768px) {
+  .showcase {
+    padding: var(--onyom-space-4) var(--onyom-space-2);
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: var(--onyom-space-6);
+    align-items: flex-start;
+  }
+  
+  .title {
+    font-size: var(--onyom-text-4xl);
+  }
+  
+  .subtitle {
+    font-size: var(--onyom-text-lg);
+  }
+  
+  .themeSwitcher {
+    align-self: stretch;
+  }
+  
+  .colorGrid,
+  .buttonGrid,
+  .cardGrid,
+  .glassGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .animationGrid,
+  .accessibilityGrid,
+  .principlesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .buttonRow {
+    flex-direction: column;
+  }
+}
+
+/* ================================
+   REDUCED MOTION SUPPORT
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .colorSwatch:hover,
+  .glassCard:hover,
+  .principle:hover {
+    transform: none;
+  }
+  
+  .animationDemo {
+    animation: none !important;
+  }
+}
+
+/* Meditation Player Demo */
+.playerDemo {
+  margin-top: var(--onyom-space-8);
+  padding: var(--onyom-space-6);
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-lg);
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.playerControls {
+  display: flex;
+  gap: var(--onyom-space-3);
+  margin-bottom: var(--onyom-space-6);
+  flex-wrap: wrap;
+}
+
+.playerFeatures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--onyom-space-4);
+  margin-top: var(--onyom-space-6);
+}
+
+.feature {
+  padding: var(--onyom-space-4);
+  background: var(--onyom-bg-primary);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-md);
+  transition: all 0.2s ease;
+}
+
+.feature:hover {
+  border-color: var(--onyom-accent-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.feature h4 {
+  margin: 0 0 var(--onyom-space-2) 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
+}
+
+.feature p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--onyom-text-secondary);
+  line-height: 1.5;
+} 

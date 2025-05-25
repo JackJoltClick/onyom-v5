@@ -36,7 +36,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     
     if (!user) {
       // User not logged in - redirect to login if not on public pages
-      const publicPaths = ['/', '/login', '/signup']
+      const publicPaths = ['/', '/auth/login', '/auth/signup']
       if (!publicPaths.includes(currentPath)) {
         console.log('NavigationStore: Redirecting to login from', currentPath)
         return ROUTES.auth.login
@@ -46,6 +46,14 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
 
     // User is logged in
     const needsOnboarding = !user.name || user.name === user.email
+    
+    console.log('NavigationStore: User navigation check:', {
+      userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
+      needsOnboarding,
+      currentPath
+    })
 
     if (needsOnboarding && currentPath !== ROUTES.onboarding) {
       console.log('NavigationStore: Redirecting to onboarding for', user.id)

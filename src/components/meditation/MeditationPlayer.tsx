@@ -1,96 +1,105 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/Button'
+import { IoPlay, IoPause, IoStop, IoWarning, IoVolumeHigh, IoVolumeMute, IoCloudDownload, IoBody, IoClose } from 'react-icons/io5'
 import { useMeditationStore } from '@/stores/meditationStore'
-import { MeditationService } from '@/services/meditationService'
 import { MEDITATION_CONFIG } from '@/lib/constants'
-import type { Meditation, GeneratedMeditation } from '@/types'
 import styles from '@/styles/components/MeditationPlayer.module.css'
 
-export function MeditationPlayer(): React.ReactElement {
+export function MeditationPlayer(): React.ReactElement | null {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [localCurrentTime, setLocalCurrentTime] = useState(0)
-  const [audioLoaded, setAudioLoaded] = useState(false)
+  const [isAudioLoaded, setIsAudioLoaded] = useState(false)
+  const [hasError, setHasError] = useState(false)
+  const [isAudioMissing, setIsAudioMissing] = useState(false)
+  const [volume, setVolume] = useState(0.7)
+  const [isMuted, setIsMuted] = useState(false)
 
-  // Store state
-  const player = useMeditationStore((state) => state.player)
-  const pauseMeditation = useMeditationStore((state) => state.pauseMeditation)
-  const resumeMeditation = useMeditationStore((state) => state.resumeMeditation)
-  const stopMeditation = useMeditationStore((state) => state.stopMeditation)
-  const seekTo = useMeditationStore((state) => state.seekTo)
-  const setVolume = useMeditationStore((state) => state.setVolume)
-  const setBackgroundSound = useMeditationStore((state) => state.setBackgroundSound)
+  const { 
+    player,
+    pauseMeditation,
+    resumeMeditation,
+    stopMeditation,
+    updateCurrentTime,
+    updateDuration
+  } = useMeditationStore()
 
-  const { currentMeditation, isPlaying, currentTime, duration, volume, backgroundSound } = player
+  const { currentMeditation, isPlaying, currentTime, duration } = player
 
-  // Handle audio loading and playback
+  // Format time helper
+  const formatTime = (time: number): string => {
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
+
+  // Audio event handlers
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentMeditation?.audio_url) return
 
-    audio.src = currentMeditation.audio_url
-    audio.volume = volume
-
     const handleLoadedData = () => {
-      setAudioLoaded(true)
-      seekTo(currentTime)
+      setIsAudioLoaded(true)
+      setHasError(false)
+      setIsAudioMissing(false)
+      updateCurrentTime(0)
+      updateDuration(audio.duration)
+    }
+
+    const handleError = (e: Event) => {
+      console.error('Audio failed to load:', currentMeditation.audio_url)
+      setHasError(true)
+      setIsAudioLoaded(false)
+      
+      // Check if it's a 404 (file not found) error
+      const target = e.target as HTMLAudioElement
+      if (target?.error?.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
+        setIsAudioMissing(true)
+      }
     }
 
     const handleTimeUpdate = () => {
-      setLocalCurrentTime(audio.currentTime)
+      updateCurrentTime(audio.currentTime)
     }
 
     const handleEnded = () => {
       stopMeditation()
-      setLocalCurrentTime(0)
-    }
-
-    const handleError = () => {
-      console.error('Audio playback error')
-      setAudioLoaded(false)
     }
 
     audio.addEventListener('loadeddata', handleLoadedData)
+    audio.addEventListener('error', handleError)
     audio.addEventListener('timeupdate', handleTimeUpdate)
     audio.addEventListener('ended', handleEnded)
-    audio.addEventListener('error', handleError)
+
+    // Set volume
+    audio.volume = isMuted ? 0 : volume
 
     return () => {
       audio.removeEventListener('loadeddata', handleLoadedData)
+      audio.removeEventListener('error', handleError)
       audio.removeEventListener('timeupdate', handleTimeUpdate)
       audio.removeEventListener('ended', handleEnded)
-      audio.removeEventListener('error', handleError)
     }
-  }, [currentMeditation?.audio_url, volume, currentTime, seekTo, stopMeditation])
+  }, [currentMeditation?.audio_url, volume, isMuted, updateCurrentTime, updateDuration, stopMeditation])
 
-  // Handle play/pause
+  // Play/pause control
   useEffect(() => {
     const audio = audioRef.current
-    if (!audio || !audioLoaded) return
+    if (!audio || !isAudioLoaded) return
 
     if (isPlaying) {
       const playPromise = audio.play()
-      if (playPromise) {
+      if (playPromise !== undefined) {
         playPromise.catch(error => {
-          console.error('Audio play error:', error)
+          console.error('Error playing audio:', error)
+          setHasError(true)
         })
       }
     } else {
       audio.pause()
     }
-  }, [isPlaying, audioLoaded])
-
-  // Handle seeking
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio || !audioLoaded) return
-
-    if (Math.abs(audio.currentTime - currentTime) > 1) {
-      audio.currentTime = currentTime
-    }
-  }, [currentTime, audioLoaded])
+  }, [isPlaying, isAudioLoaded])
 
   const handlePlayPause = () => {
+    if (!isAudioLoaded) return
+    
     if (isPlaying) {
       pauseMeditation()
     } else {
@@ -98,159 +107,205 @@ export function MeditationPlayer(): React.ReactElement {
     }
   }
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = parseFloat(e.target.value)
-    seekTo(time)
+  const handleStop = () => {
+    stopMeditation()
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0
+    }
+  }
+
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const audio = audioRef.current
+    if (!audio || !isAudioLoaded) return
+    
+    const newTime = parseFloat(e.target.value)
+    audio.currentTime = newTime
+    updateCurrentTime(newTime)
   }
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value)
     setVolume(newVolume)
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : newVolume
+    }
   }
 
-  const formatTime = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = Math.floor(seconds % 60)
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
-  }
-
-  const getProgressPercentage = (): number => {
-    if (!duration) return 0
-    return (localCurrentTime / duration) * 100
+  const toggleMute = () => {
+    const newMuted = !isMuted
+    setIsMuted(newMuted)
+    if (audioRef.current) {
+      audioRef.current.volume = newMuted ? 0 : volume
+    }
   }
 
   const handleClose = () => {
     stopMeditation()
-    if (currentMeditation?.audio_url) {
-      MeditationService.cleanupAudioUrl(currentMeditation.audio_url)
-    }
+    // This will clear the current meditation and hide the player
   }
 
+  // Don't render if no meditation is selected
   if (!currentMeditation) {
-    return <></>
+    return null
   }
 
-  const categoryConfig = MEDITATION_CONFIG.categories[currentMeditation.category]
-  const isGenerated = 'is_personalized' in currentMeditation
+  const categoryConfig = MEDITATION_CONFIG.categories[currentMeditation.category] || {
+    name: 'Mindfulness',
+    icon: IoBody,
+    color: '#4F46E5'
+  }
+
+  const IconComponent = categoryConfig.icon
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className={styles.player}
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 100, opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <audio ref={audioRef} preload="auto" />
-        
-        <div className={styles.playerContent}>
-          {/* Meditation Info */}
-          <div className={styles.meditationInfo}>
-            <div className={styles.meditationDetails}>
-              <h3 className={styles.title}>{currentMeditation.title}</h3>
-              <div className={styles.metadata}>
-                <span className={styles.category} style={{ color: categoryConfig.color }}>
-                  {categoryConfig.icon} {categoryConfig.name}
-                </span>
-                {isGenerated && (
-                  <span className={styles.generatedBadge}>✨ Personalized</span>
-                )}
-                <span className={styles.duration}>
-                  {currentMeditation.duration_minutes} min
-                </span>
-              </div>
-            </div>
-            
-            <button 
-              className={styles.closeButton}
-              onClick={handleClose}
-              aria-label="Close player"
-            >
-              ✕
-            </button>
-          </div>
+    <div className={styles.player}>
+      {/* Hidden audio element */}
+      {currentMeditation?.audio_url && (
+        <audio
+          ref={audioRef}
+          src={currentMeditation.audio_url}
+          preload="metadata"
+        />
+      )}
 
+      {/* Track Info */}
+      <div className={styles.trackInfo}>
+        <div className={styles.albumArt}>
+          <IconComponent size={24} color={categoryConfig.color} />
+        </div>
+        <div className={styles.trackDetails}>
+          <h4 className={styles.trackTitle}>{currentMeditation.title}</h4>
+          <p className={styles.trackArtist}>{currentMeditation.instructor}</p>
+        </div>
+        <button
+          onClick={handleClose}
+          className={styles.closeButton}
+          aria-label="Close player"
+        >
+          <IoClose size={20} />
+        </button>
+      </div>
+
+      {/* Error States */}
+      {isAudioMissing && (
+        <div className={styles.audioMissing}>
+          <IoCloudDownload size={20} style={{ color: '#F59E0B', marginRight: '8px' }} />
+          <div>
+            <p><strong>Audio file not found</strong></p>
+            <p>The meditation audio hasn't been uploaded yet. You can still read the script below or add audio files to the /public/audio/ directory.</p>
+          </div>
+        </div>
+      )}
+
+      {hasError && !isAudioMissing && (
+        <div className={styles.error}>
+          <IoWarning size={20} style={{ color: '#DC2626', marginRight: '8px' }} />
+          <p>Audio failed to load. Please try again later.</p>
+        </div>
+      )}
+
+      {/* Audio Controls */}
+      {!hasError && !isAudioMissing && (
+        <>
           {/* Progress Bar */}
           <div className={styles.progressSection}>
-            <div className={styles.progressBar}>
-              <div 
-                className={styles.progress}
-                style={{ width: `${getProgressPercentage()}%` }}
-              />
+            <span className={styles.timeDisplay}>{formatTime(currentTime)}</span>
+            
+            <div className={styles.progressContainer}>
+              <div className={styles.progressTrack}>
+                <div 
+                  className={styles.progressFill}
+                  style={{ 
+                    width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%' 
+                  }}
+                />
+                <div 
+                  className={styles.progressColorLayer}
+                  style={{ 
+                    width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%',
+                    '--progress-percentage': duration > 0 ? (currentTime / duration) * 100 : 0
+                  } as React.CSSProperties}
+                />
+                <div 
+                  className={styles.progressThumb}
+                  style={{ 
+                    left: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%' 
+                  }}
+                />
+              </div>
+              
               <input
                 type="range"
                 min="0"
-                max={duration || 100}
-                value={localCurrentTime}
-                onChange={handleSeek}
+                max={duration || 0}
+                value={currentTime}
+                onChange={handleProgressChange}
                 className={styles.progressInput}
-                disabled={!audioLoaded}
+                disabled={!isAudioLoaded}
+                aria-label="Meditation progress"
               />
             </div>
             
-            <div className={styles.timeDisplay}>
-              <span>{formatTime(localCurrentTime)}</span>
-              <span>{formatTime(duration || 0)}</span>
-            </div>
+            <span className={styles.timeDisplay}>{formatTime(duration)}</span>
           </div>
 
-          {/* Controls */}
+          {/* Control Buttons */}
           <div className={styles.controls}>
-            <div className={styles.playbackControls}>
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={handlePlayPause}
-                disabled={!audioLoaded}
-                className={styles.playButton}
-              >
-                {isPlaying ? '⏸️' : '▶️'}
-              </Button>
-              
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => stopMeditation()}
-                disabled={!audioLoaded}
-                className={styles.stopButton}
-              >
-                ⏹️
-              </Button>
-            </div>
+            <button
+              onClick={handleStop}
+              className={styles.controlButton}
+              disabled={!isAudioLoaded}
+              aria-label="Stop"
+            >
+              <IoStop size={20} />
+            </button>
 
-            <div className={styles.volumeControl}>
-              <span className={styles.volumeIcon}>🔊</span>
+            <button
+              onClick={handlePlayPause}
+              className={`${styles.playButton} ${!isAudioLoaded ? styles.loading : ''}`}
+              disabled={!isAudioLoaded}
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+            >
+              {!isAudioLoaded ? (
+                <div className={styles.spinner} />
+              ) : isPlaying ? (
+                <IoPause size={24} />
+              ) : (
+                <IoPlay size={24} />
+              )}
+            </button>
+
+            {/* Volume Control */}
+            <div className={styles.volumeContainer}>
+              <button
+                onClick={toggleMute}
+                className={styles.volumeButton}
+                aria-label={isMuted ? 'Unmute' : 'Mute'}
+              >
+                {isMuted ? <IoVolumeMute size={18} /> : <IoVolumeHigh size={18} />}
+              </button>
               <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.1"
-                value={volume}
+                value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
                 className={styles.volumeSlider}
+                aria-label="Volume"
               />
             </div>
           </div>
+        </>
+      )}
 
-          {/* Background Sound Selector */}
-          <div className={styles.backgroundSounds}>
-            <span className={styles.backgroundLabel}>Background:</span>
-            <div className={styles.soundOptions}>
-              {Object.entries(MEDITATION_CONFIG.backgroundSounds).map(([key, sound]) => (
-                <button
-                  key={key}
-                  className={`${styles.soundOption} ${backgroundSound === key ? styles.active : ''}`}
-                  onClick={() => setBackgroundSound(backgroundSound === key ? undefined : key)}
-                >
-                  <span>{sound.icon}</span>
-                  <span>{sound.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+      {/* Meditation Script Fallback */}
+      {(isAudioMissing || hasError) && currentMeditation.script_text && (
+        <div className={styles.scriptFallback}>
+          <h5>Meditation Script</h5>
+          <p>{currentMeditation.script_text}</p>
         </div>
-      </motion.div>
-    </AnimatePresence>
+      )}
+    </div>
   )
 } 

@@ -1,146 +1,329 @@
+/* ================================
+   ONYOM BUTTON COMPONENT
+   Therapeutic Design System
+   ================================ */
+
 .button {
+  /* Base structure */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  border-radius: var(--border-radius);
-  font-family: inherit;
-  font-weight: var(--font-weight-medium);
-  text-decoration: none;
-  cursor: pointer;
-  transition: all var(--transition-fast);
   position: relative;
-  outline: none;
+  
+  /* Typography */
+  font-family: var(--onyom-font-family-primary);
+  font-weight: var(--onyom-font-weight-medium);
+  text-decoration: none;
   white-space: nowrap;
+  
+  /* Visual design */
+  border: none;
+  border-radius: var(--onyom-radius-pill);
+  cursor: pointer;
+  
+  /* Smooth interactions */
+  transition: all var(--onyom-duration-normal) var(--onyom-ease-out);
+  
+  /* Focus management */
+  outline: none;
 }
 
 .button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+  transform: none !important;
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--accent-color);
+  outline: 2px solid var(--onyom-accent-primary);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--onyom-accent-primary-light);
 }
 
-/* Size variants */
+/* ================================
+   SIZE VARIANTS
+   ================================ */
+
 .sm {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  min-height: 32px;
+  padding: var(--onyom-space-2) var(--onyom-space-4);
+  font-size: var(--onyom-text-sm);
+  min-height: var(--onyom-touch-target);
+  gap: var(--onyom-space-2);
 }
 
 .md {
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-md);
-  min-height: 40px;
+  padding: var(--onyom-space-3) var(--onyom-space-6);
+  font-size: var(--onyom-text-base);
+  min-height: var(--onyom-touch-target-lg);
+  gap: var(--onyom-space-2);
 }
 
 .lg {
-  padding: var(--spacing-md) var(--spacing-lg);
-  font-size: var(--font-size-md);
-  min-height: 48px;
+  padding: var(--onyom-space-4) var(--onyom-space-8);
+  font-size: var(--onyom-text-lg);
+  min-height: 56px;
+  gap: var(--onyom-space-3);
+  font-weight: var(--onyom-font-weight-semibold);
 }
 
-/* Variant styles */
+/* ================================
+   STYLE VARIANTS
+   ================================ */
+
+/* Primary - Therapeutic blue with gentle hover */
 .primary {
-  background-color: var(--accent-color);
+  background: linear-gradient(135deg, var(--onyom-accent-primary) 0%, var(--onyom-accent-primary-hover) 100%);
   color: white;
-  border: 1px solid var(--accent-color);
+  border: 1px solid transparent;
+  box-shadow: var(--onyom-shadow-sm);
 }
 
 .primary:hover:not(:disabled) {
-  background-color: var(--accent-color-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--onyom-accent-primary-hover) 0%, #8BB8D0 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md), var(--onyom-shadow-glow);
 }
 
 .primary:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+  box-shadow: var(--onyom-shadow-sm);
 }
 
+/* Secondary - Soft elevated surface */
 .secondary {
-  background-color: var(--surface-color-light);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
+  background-color: var(--onyom-bg-elevated);
+  color: var(--onyom-text-primary);
+  border: 1px solid var(--onyom-border-soft);
+  box-shadow: var(--onyom-shadow-xs);
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: var(--surface-color);
-  border-color: var(--border-color-light);
-  transform: translateY(-1px);
+  background-color: var(--onyom-bg-interactive);
+  border-color: var(--onyom-border-medium);
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-base);
 }
 
+/* Ghost - Minimal with gentle background */
 .ghost {
   background-color: transparent;
-  color: var(--text-color-light);
+  color: var(--onyom-text-secondary);
   border: 1px solid transparent;
 }
 
 .ghost:hover:not(:disabled) {
-  background-color: var(--surface-color-light);
-  color: var(--text-color);
+  background-color: var(--onyom-accent-primary-light);
+  color: var(--onyom-text-primary);
+  border-color: var(--onyom-border-subtle);
 }
 
+/* Sage - Using secondary color for variety */
+.sage {
+  background: linear-gradient(135deg, var(--onyom-sage) 0%, #A0C69A 100%);
+  color: var(--onyom-text-inverse);
+  border: 1px solid transparent;
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.sage:hover:not(:disabled) {
+  background: linear-gradient(135deg, #A0C69A 0%, #B0D6AA 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md), 0 0 20px rgba(144, 181, 137, 0.3);
+}
+
+/* Beige - Warm accent option */
+.beige {
+  background: linear-gradient(135deg, var(--onyom-beige) 0%, #D2B288 100%);
+  color: var(--onyom-text-inverse);
+  border: 1px solid transparent;
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.beige:hover:not(:disabled) {
+  background: linear-gradient(135deg, #D2B288 0%, #E2C298 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md), 0 0 20px rgba(194, 162, 120, 0.3);
+}
+
+/* Danger - Soft error state */
 .danger {
-  background-color: var(--error-color);
-  color: white;
-  border: 1px solid var(--error-color);
+  background-color: var(--onyom-error);
+  color: var(--onyom-text-inverse);
+  border: 1px solid transparent;
+  box-shadow: var(--onyom-shadow-sm);
 }
 
 .danger:hover:not(:disabled) {
-  background-color: #dc2626;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background-color: #F0B5B5;
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md);
 }
 
-/* Loading state */
+/* ================================
+   LOADING STATE
+   ================================ */
+
 .loading {
   color: transparent;
   pointer-events: none;
+  position: relative;
 }
 
-.spinner {
+.loading::after {
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin var(--onyom-duration-slow) linear infinite;
 }
 
 @keyframes spin {
   from {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
-/* Mobile touch targets */
+/* ================================
+   ICON HANDLING
+   ================================ */
+
+.button svg {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+  transition: transform var(--onyom-duration-normal) var(--onyom-ease-out);
+}
+
+.button:hover:not(:disabled) svg {
+  transform: scale(1.1);
+}
+
+/* Icon-only buttons */
+.iconOnly {
+  aspect-ratio: 1;
+  padding: var(--onyom-space-3);
+}
+
+.iconOnly.sm {
+  padding: var(--onyom-space-2);
+}
+
+.iconOnly.lg {
+  padding: var(--onyom-space-4);
+}
+
+/* ================================
+   SPECIAL STATES
+   ================================ */
+
+/* Breathing animation for meditation contexts */
+.breathe {
+  animation: button-breathe 4s var(--onyom-ease-breath) infinite;
+}
+
+@keyframes button-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--onyom-shadow-sm);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: var(--onyom-shadow-md);
+  }
+}
+
+/* Floating action button style */
+.floating {
+  border-radius: var(--onyom-radius-full);
+  box-shadow: var(--onyom-shadow-lg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--onyom-glass-border);
+}
+
+.floating:hover:not(:disabled) {
+  box-shadow: var(--onyom-shadow-xl);
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* ================================
+   RESPONSIVE TOUCH IMPROVEMENTS
+   ================================ */
+
 @media (hover: none) and (pointer: coarse) {
   .button {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: var(--onyom-touch-target);
+    min-width: var(--onyom-touch-target);
   }
   
   .sm {
-    min-height: 44px;
-    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: var(--onyom-touch-target);
+    padding: var(--onyom-space-3) var(--onyom-space-5);
+  }
+  
+  .lg {
+    min-height: 56px;
+    padding: var(--onyom-space-5) var(--onyom-space-10);
+  }
+  
+  /* Reduce hover effects on touch devices */
+  .button:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  /* Add gentle press feedback */
+  .button:active:not(:disabled) {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
   }
 }
 
-/* Touch targets for mobile */
-@media (hover: none) and (pointer: coarse) {
+/* ================================
+   HIGH CONTRAST MODE
+   ================================ */
+
+@media (prefers-contrast: high) {
   .button {
-    min-height: 44px;
+    border-width: 2px;
+  }
+  
+  .primary {
+    border-color: var(--onyom-accent-primary);
+  }
+  
+  .secondary {
+    border-color: var(--onyom-text-primary);
+  }
+}
+
+/* ================================
+   REDUCED MOTION SUPPORT
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+  
+  .button:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .breathe {
+    animation: none;
+  }
+  
+  .loading::after {
+    animation: none;
+    opacity: 0.7;
   }
 }
  

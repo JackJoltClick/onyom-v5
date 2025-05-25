@@ -1,0 +1,284 @@
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-6);
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--onyom-space-4);
+}
+
+.statCard {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-lg);
+  padding: var(--onyom-space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--onyom-space-4);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md);
+  border-color: var(--onyom-accent-primary);
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--onyom-accent-primary), var(--onyom-sage));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.statCard:hover::before {
+  opacity: 1;
+}
+
+.statIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: var(--onyom-shadow-sm);
+  flex-shrink: 0;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-1);
+  flex: 1;
+}
+
+.statValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--onyom-text-primary);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: var(--onyom-text-secondary);
+  font-weight: 500;
+}
+
+/* Progress Grid */
+.progressGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--onyom-space-4);
+}
+
+.progressCard {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-lg);
+  padding: var(--onyom-space-6);
+  box-shadow: var(--onyom-shadow-sm);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md);
+}
+
+.progressCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--onyom-accent-primary), var(--onyom-sage));
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--onyom-space-4);
+}
+
+.progressInfo {
+  flex: 1;
+}
+
+.progressTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
+  margin: 0 0 var(--onyom-space-1) 0;
+}
+
+.progressSubtitle {
+  font-size: 0.875rem;
+  color: var(--onyom-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.progressIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.progressBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-2);
+}
+
+.progressTrack {
+  height: 8px;
+  background: var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--onyom-accent-primary) 0%,
+    var(--onyom-sage) 100%
+  );
+  border-radius: var(--onyom-radius-full);
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progressMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressPoints {
+  font-size: 0.75rem;
+  color: var(--onyom-text-secondary);
+  font-weight: 500;
+}
+
+.progressPercentage {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--onyom-space-3);
+  }
+
+  .statCard {
+    padding: var(--onyom-space-4);
+    gap: var(--onyom-space-3);
+  }
+
+  .statIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .statValue {
+    font-size: 1.5rem;
+  }
+
+  .progressGrid {
+    grid-template-columns: 1fr;
+    gap: var(--onyom-space-3);
+  }
+
+  .progressCard {
+    padding: var(--onyom-space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .statCard {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--onyom-space-2);
+  }
+
+  .statIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .statValue {
+    font-size: 1.25rem;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill::after {
+    animation: none;
+  }
+
+  * {
+    transition: none !important;
+  }
+} 

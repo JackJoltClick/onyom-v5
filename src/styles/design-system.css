@@ -1,0 +1,307 @@
+/* ================================
+   ONYOM DESIGN SYSTEM
+   Therapeutic & Mindful UI/UX
+   ================================ */
+
+/* ================================
+   DESIGN TOKENS
+   ================================ */
+
+:root {
+  /* ================================
+     COLOR PALETTE - THERAPEUTIC DESIGN
+     ================================ */
+  
+  /* Primary Dark Theme (Default) - Calming blue-grays */
+  --onyom-bg-deep: #151A23;           /* Deep, calming blue-gray */
+  --onyom-bg-surface: #212832;        /* Elevated surfaces */
+  --onyom-bg-elevated: #2A3441;       /* Cards, modals */
+  --onyom-bg-interactive: #334155;     /* Hover states */
+  
+  /* Therapeutic Blue - Primary accent */
+  --onyom-accent-primary: #6998B0;     /* Calming yet engaging */
+  --onyom-accent-primary-hover: #7BA8C0;
+  --onyom-accent-primary-light: rgba(105, 152, 176, 0.15);
+  --onyom-accent-primary-rgb: 105, 152, 176;
+  
+  /* Text Colors - Soft and comfortable */
+  --onyom-text-primary: #ECF0F3;       /* Soft white for comfort */
+  --onyom-text-secondary: #B8C5D1;     /* Secondary text */
+  --onyom-text-muted: #8B98A8;        /* Muted text */
+  --onyom-text-inverse: #1F2937;       /* Text on light backgrounds */
+  
+  /* Secondary Colors for variety and warmth */
+  --onyom-sage: #90B589;               /* Sage green - nature, growth */
+  --onyom-sage-light: rgba(144, 181, 137, 0.15);
+  --onyom-beige: #C2A278;              /* Warm beige - comfort */
+  --onyom-beige-light: rgba(194, 162, 120, 0.15);
+  
+  /* System Colors - Gentle and non-alarming */
+  --onyom-success: #7DD3C0;            /* Gentle success */
+  --onyom-warning: #F4C27C;            /* Warm warning */
+  --onyom-error: #E8A5A5;              /* Soft error */
+  --onyom-info: var(--onyom-accent-primary);
+  
+  /* Borders and dividers */
+  --onyom-border-subtle: rgba(236, 240, 243, 0.08);
+  --onyom-border-soft: rgba(236, 240, 243, 0.12);
+  --onyom-border-medium: rgba(236, 240, 243, 0.18);
+  
+  /* Glassmorphism effects */
+  --onyom-glass-bg: rgba(255, 255, 255, 0.05);
+  --onyom-glass-border: rgba(255, 255, 255, 0.1);
+  --onyom-glass-backdrop: blur(12px);
+  
+  /* ================================
+     ALTERNATIVE THEMES
+     ================================ */
+  
+  /* Light theme variables (to be applied when data-theme="light") */
+  --onyom-light-bg-deep: #FDFCFB;
+  --onyom-light-bg-surface: #F9F7F6;
+  --onyom-light-bg-elevated: #F4F1F0;
+  --onyom-light-text-primary: #2D3748;
+  --onyom-light-text-secondary: #4A5568;
+  --onyom-light-border-subtle: rgba(45, 55, 72, 0.08);
+  
+  /* ================================
+     TYPOGRAPHY SCALE
+     ================================ */
+  
+  --onyom-font-family-primary: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --onyom-font-family-secondary: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Font sizes - Comfortable reading scale */
+  --onyom-text-xs: 0.75rem;     /* 12px */
+  --onyom-text-sm: 0.875rem;    /* 14px */
+  --onyom-text-base: 1rem;      /* 16px */
+  --onyom-text-lg: 1.125rem;    /* 18px */
+  --onyom-text-xl: 1.25rem;     /* 20px */
+  --onyom-text-2xl: 1.5rem;     /* 24px */
+  --onyom-text-3xl: 1.875rem;   /* 30px */
+  --onyom-text-4xl: 2.25rem;    /* 36px */
+  --onyom-text-5xl: 3rem;       /* 48px */
+  
+  /* Font weights - Gentle hierarchy */
+  --onyom-font-weight-normal: 400;
+  --onyom-font-weight-medium: 500;
+  --onyom-font-weight-semibold: 600;
+  --onyom-font-weight-bold: 700;
+  
+  /* Line heights - Relaxed for emotional comfort */
+  --onyom-leading-tight: 1.25;
+  --onyom-leading-normal: 1.5;
+  --onyom-leading-relaxed: 1.75;
+  --onyom-leading-loose: 2;
+  
+  /* ================================
+     SPACING SCALE - 4px base unit
+     ================================ */
+  
+  --onyom-space-0: 0;
+  --onyom-space-1: 0.25rem;     /* 4px */
+  --onyom-space-2: 0.5rem;      /* 8px */
+  --onyom-space-3: 0.75rem;     /* 12px */
+  --onyom-space-4: 1rem;        /* 16px */
+  --onyom-space-5: 1.25rem;     /* 20px */
+  --onyom-space-6: 1.5rem;      /* 24px */
+  --onyom-space-8: 2rem;        /* 32px */
+  --onyom-space-10: 2.5rem;     /* 40px */
+  --onyom-space-12: 3rem;       /* 48px */
+  --onyom-space-16: 4rem;       /* 64px */
+  --onyom-space-20: 5rem;       /* 80px */
+  --onyom-space-24: 6rem;       /* 96px */
+  
+  /* ================================
+     BORDER RADIUS - Soft and rounded
+     ================================ */
+  
+  --onyom-radius-xs: 0.125rem;   /* 2px */
+  --onyom-radius-sm: 0.25rem;    /* 4px */
+  --onyom-radius-base: 0.5rem;   /* 8px */
+  --onyom-radius-md: 0.75rem;    /* 12px */
+  --onyom-radius-lg: 1rem;       /* 16px */
+  --onyom-radius-xl: 1.5rem;     /* 24px */
+  --onyom-radius-2xl: 2rem;      /* 32px */
+  --onyom-radius-pill: 50px;     /* Pill-shaped buttons */
+  --onyom-radius-full: 9999px;   /* Fully rounded */
+  
+  /* ================================
+     SHADOWS - Soft and calming
+     ================================ */
+  
+  --onyom-shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --onyom-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --onyom-shadow-base: 0 4px 6px rgba(0, 0, 0, 0.06);
+  --onyom-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
+  --onyom-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --onyom-shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+  
+  /* Glow effects for interactive elements */
+  --onyom-shadow-glow: 0 0 20px rgba(105, 152, 176, 0.3);
+  --onyom-shadow-glow-lg: 0 0 40px rgba(105, 152, 176, 0.2);
+  
+  /* ================================
+     ANIMATION & TIMING
+     ================================ */
+  
+  /* Gentle, therapeutic timing */
+  --onyom-duration-instant: 0ms;
+  --onyom-duration-fast: 150ms;
+  --onyom-duration-normal: 250ms;
+  --onyom-duration-slow: 350ms;
+  --onyom-duration-breath: 500ms;    /* For breathing animations */
+  
+  /* Easing functions - Natural movement */
+  --onyom-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --onyom-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --onyom-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --onyom-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --onyom-ease-breath: cubic-bezier(0.37, 0, 0.63, 1);
+  
+  /* ================================
+     LAYOUT & SIZING
+     ================================ */
+  
+  /* Touch targets for accessibility */
+  --onyom-touch-target: 44px;         /* Minimum touch target */
+  --onyom-touch-target-lg: 48px;      /* Large touch target */
+  
+  /* Content widths */
+  --onyom-content-xs: 20rem;          /* 320px */
+  --onyom-content-sm: 24rem;          /* 384px */
+  --onyom-content-md: 28rem;          /* 448px */
+  --onyom-content-lg: 32rem;          /* 512px */
+  --onyom-content-xl: 36rem;          /* 576px */
+  --onyom-content-2xl: 42rem;         /* 672px */
+  --onyom-content-full: 100%;
+  
+  /* App layout constants */
+  --onyom-header-height: 60px;
+  --onyom-navigation-height: 70px;
+  --onyom-safe-top: env(safe-area-inset-top, 0px);
+  --onyom-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --onyom-safe-left: env(safe-area-inset-left, 0px);
+  --onyom-safe-right: env(safe-area-inset-right, 0px);
+  
+  /* ================================
+     Z-INDEX SCALE
+     ================================ */
+  
+  --onyom-z-base: 0;
+  --onyom-z-raised: 10;
+  --onyom-z-dropdown: 100;
+  --onyom-z-sticky: 200;
+  --onyom-z-overlay: 300;
+  --onyom-z-modal: 400;
+  --onyom-z-toast: 500;
+  --onyom-z-tooltip: 600;
+}
+
+/* ================================
+   THEME VARIATIONS
+   ================================ */
+
+/* Light Theme */
+[data-theme="light"] {
+  --onyom-bg-deep: var(--onyom-light-bg-deep);
+  --onyom-bg-surface: var(--onyom-light-bg-surface);
+  --onyom-bg-elevated: var(--onyom-light-bg-elevated);
+  --onyom-text-primary: var(--onyom-light-text-primary);
+  --onyom-text-secondary: var(--onyom-light-text-secondary);
+  --onyom-border-subtle: var(--onyom-light-border-subtle);
+  
+  --onyom-glass-bg: rgba(255, 255, 255, 0.7);
+  --onyom-glass-border: rgba(255, 255, 255, 0.3);
+}
+
+/* Calming Theme - For evening use */
+[data-theme="calming"] {
+  --onyom-bg-deep: #0F1419;
+  --onyom-bg-surface: #1A1F26;
+  --onyom-accent-primary: #5B8FA8;
+}
+
+/* Easy Read Theme - High contrast */
+[data-theme="easy-read"] {
+  --onyom-bg-deep: #000000;
+  --onyom-bg-surface: #1A1A1A;
+  --onyom-text-primary: #FFFFFF;
+  --onyom-accent-primary: #00BFFF;
+  --onyom-font-family-primary: Georgia, serif;
+}
+
+/* ================================
+   REDUCED MOTION SUPPORT
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --onyom-duration-fast: 0ms;
+    --onyom-duration-normal: 0ms;
+    --onyom-duration-slow: 0ms;
+    --onyom-duration-breath: 0ms;
+  }
+}
+
+/* ================================
+   COMPONENT FOUNDATIONS
+   ================================ */
+
+/* Glass effect utility */
+.onyom-glass {
+  background: var(--onyom-glass-bg);
+  backdrop-filter: var(--onyom-glass-backdrop);
+  border: 1px solid var(--onyom-glass-border);
+}
+
+/* Breathing animation base */
+@keyframes onyom-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.onyom-breathe {
+  animation: onyom-breathe 4s var(--onyom-ease-breath) infinite;
+}
+
+/* Gentle lift effect */
+.onyom-lift {
+  transition: transform var(--onyom-duration-normal) var(--onyom-ease-out);
+}
+
+.onyom-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Focus ring for accessibility */
+.onyom-focus-ring {
+  outline: 2px solid var(--onyom-accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--onyom-radius-base);
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+/* Text utilities */
+.onyom-text-primary { color: var(--onyom-text-primary); }
+.onyom-text-secondary { color: var(--onyom-text-secondary); }
+.onyom-text-muted { color: var(--onyom-text-muted); }
+
+/* Background utilities */
+.onyom-bg-surface { background-color: var(--onyom-bg-surface); }
+.onyom-bg-elevated { background-color: var(--onyom-bg-elevated); }
+
+/* Spacing utilities */
+.onyom-p-4 { padding: var(--onyom-space-4); }
+.onyom-p-6 { padding: var(--onyom-space-6); }
+.onyom-m-4 { margin: var(--onyom-space-4); }
+.onyom-m-6 { margin: var(--onyom-space-6); } 

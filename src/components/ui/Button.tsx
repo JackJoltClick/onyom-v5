@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import styles from '@/styles/components/Button.module.css'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'sage' | 'beige'
   size?: 'sm' | 'md' | 'lg'
   isLoading?: boolean
   children: React.ReactNode
@@ -30,11 +30,7 @@ export function Button({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading ? (
-        <span className={styles.spinner} />
-      ) : (
-        children
-      )}
+      {children}
     </button>
   )
 } 

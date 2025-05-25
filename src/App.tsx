@@ -6,6 +6,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { MeditationPlayer } from '@/components/meditation/MeditationPlayer'
+import { useAuthNavigation } from '@/hooks/useAuthNavigation'
 
 // Pages
 import { LandingPage } from '@/pages/LandingPage'
@@ -16,9 +17,13 @@ import { ChatPage } from '@/pages/app/ChatPage'
 import { MeditationsPage } from '@/pages/app/MeditationsPage'
 import { BreathworkPage } from '@/pages/app/BreathworkPage'
 import { ProfilePage } from '@/pages/app/ProfilePage'
+import { DebugPage } from '@/pages/DebugPage'
 
 // Navigation
 import { BottomNavigation } from '@/components/navigation/BottomNavigation'
+
+// Design System
+import { DesignShowcase } from '@/components/ui/DesignShowcase'
 
 import { ROUTES } from '@/lib/constants'
 
@@ -34,114 +39,132 @@ const queryClient = new QueryClient({
   },
 })
 
+// App content component that uses navigation hook
+function AppContent(): React.ReactElement {
+  // This hook handles automatic navigation after auth state changes
+  useAuthNavigation()
+
+  return (
+    <div className="app">
+      <Routes>
+        {/* Public routes */}
+        <Route path={ROUTES.home} element={<LandingPage />} />
+        <Route path={ROUTES.auth.login} element={<LoginPage />} />
+        <Route path={ROUTES.auth.signup} element={<SignUpPage />} />
+        
+        {/* Design System Showcase */}
+        <Route path="/design" element={<DesignShowcase />} />
+        
+        {/* Onboarding */}
+        <Route
+          path={ROUTES.onboarding}
+          element={
+            <ProtectedRoute>
+              <OnboardingPage />
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* Protected app routes */}
+        <Route
+          path={ROUTES.app.chat}
+          element={
+            <ProtectedRoute>
+              <div className="app-layout">
+                <ChatPage />
+                <BottomNavigation />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path={ROUTES.app.meditations}
+          element={
+            <ProtectedRoute>
+              <div className="app-layout">
+                <MeditationsPage />
+                <BottomNavigation />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path={ROUTES.app.breathwork}
+          element={
+            <ProtectedRoute>
+              <div className="app-layout">
+                <BreathworkPage />
+                <BottomNavigation />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path={ROUTES.app.profile}
+          element={
+            <ProtectedRoute>
+              <div className="app-layout">
+                <ProfilePage />
+                <BottomNavigation />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* Debug route */}
+        <Route path={ROUTES.debug} element={<DebugPage />} />
+        
+        {/* Default redirect */}
+        <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
+      </Routes>
+      
+      {/* Global Meditation Player */}
+      <MeditationPlayer />
+      
+      {/* Global toast notifications */}
+      <Toaster 
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: 'var(--onyom-bg-surface)',
+            color: 'var(--onyom-text-primary)',
+            border: '1px solid var(--onyom-border-soft)',
+            borderRadius: 'var(--onyom-radius-lg)',
+            boxShadow: 'var(--onyom-shadow-lg)',
+          },
+          success: {
+            iconTheme: {
+              primary: 'var(--onyom-accent-primary)',
+              secondary: 'white',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: 'var(--onyom-error)',
+              secondary: 'white',
+            },
+          },
+        }}
+      />
+    </div>
+  )
+}
+
 function App(): React.ReactElement {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <Router>
-            <div className="app">
-              <Routes>
-                {/* Public routes */}
-                <Route path={ROUTES.home} element={<LandingPage />} />
-                <Route path={ROUTES.auth.login} element={<LoginPage />} />
-                <Route path={ROUTES.auth.signup} element={<SignUpPage />} />
-                
-                {/* Onboarding */}
-                <Route
-                  path={ROUTES.onboarding}
-                  element={
-                    <ProtectedRoute>
-                      <OnboardingPage />
-                    </ProtectedRoute>
-                  }
-                />
-                
-                {/* Protected app routes */}
-                <Route
-                  path={ROUTES.app.chat}
-                  element={
-                    <ProtectedRoute>
-                      <div className="app-layout">
-                        <ChatPage />
-                        <BottomNavigation />
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                
-                <Route
-                  path={ROUTES.app.meditations}
-                  element={
-                    <ProtectedRoute>
-                      <div className="app-layout">
-                        <MeditationsPage />
-                        <BottomNavigation />
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                
-                <Route
-                  path={ROUTES.app.breathwork}
-                  element={
-                    <ProtectedRoute>
-                      <div className="app-layout">
-                        <BreathworkPage />
-                        <BottomNavigation />
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                
-                <Route
-                  path={ROUTES.app.profile}
-                  element={
-                    <ProtectedRoute>
-                      <div className="app-layout">
-                        <ProfilePage />
-                        <BottomNavigation />
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                
-                {/* Default redirect */}
-                <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
-              </Routes>
-              
-              {/* Global Meditation Player */}
-              <MeditationPlayer />
-              
-              {/* Global toast notifications */}
-              <Toaster 
-                position="top-center"
-                reverseOrder={false}
-                gutter={8}
-                containerClassName=""
-                containerStyle={{}}
-                toastOptions={{
-                  duration: 4000,
-                  style: {
-                    background: 'var(--bg-secondary)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-primary)',
-                  },
-                  success: {
-                    iconTheme: {
-                      primary: 'var(--accent-primary)',
-                      secondary: 'white',
-                    },
-                  },
-                  error: {
-                    iconTheme: {
-                      primary: '#ef4444',
-                      secondary: 'white',
-                    },
-                  },
-                }}
-              />
-            </div>
+            <AppContent />
           </Router>
         </ThemeProvider>
       </QueryClientProvider>

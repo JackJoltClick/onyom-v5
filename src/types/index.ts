@@ -225,67 +225,30 @@ export interface Meditation {
   description: string
   duration_minutes: number
   category: MeditationCategory
-  difficulty_level: MeditationDifficulty
+  difficulty_level: 'beginner' | 'intermediate' | 'advanced'
+  instructor: string
+  tags: string[]
+  background_sound: string
   audio_url?: string
   script_text?: string
-  background_sound?: string
-  instructor?: string
-  tags: string[]
   created_at: string
-  is_premium?: boolean
 }
 
-export interface GeneratedMeditation extends Omit<Meditation, 'id' | 'created_at'> {
-  generated_from_chat?: string
-  user_context?: string
-  therapist_tone: TherapistTone
-  is_personalized: true
-}
-
-export interface MeditationSession {
-  id: string
-  user_id: string
-  meditation_id: string
-  duration_completed_seconds: number
-  completed_at: string
-  pre_mood_rating?: number
-  post_mood_rating?: number
-  notes?: string
-}
-
-export interface MeditationProgress {
-  total_sessions: number
-  total_minutes: number
-  current_streak: number
-  longest_streak: number
-  favorite_categories: MeditationCategory[]
-  average_session_duration: number
-  last_session_date?: string
-}
+export type MeditationCategory = 
+  | 'mindfulness' 
+  | 'anxiety-relief' 
+  | 'sleep' 
+  | 'focus' 
+  | 'self-compassion' 
+  | 'body-scan' 
+  | 'breathing' 
+  | 'stress-relief' 
+  | 'loving-kindness'
 
 export interface MeditationPlayerState {
-  currentMeditation: Meditation | GeneratedMeditation | null
+  currentMeditation: Meditation | null
   isPlaying: boolean
   currentTime: number
   duration: number
   volume: number
-  playbackRate: number
-  isLoading: boolean
-  showSubtitles: boolean
-  backgroundSound?: string
-}
-
-export type MeditationCategory = 
-  | 'mindfulness'
-  | 'anxiety-relief' 
-  | 'sleep'
-  | 'focus'
-  | 'self-compassion'
-  | 'body-scan'
-  | 'breathing'
-  | 'stress-relief'
-  | 'loving-kindness'
-
-export type MeditationDifficulty = 'beginner' | 'intermediate' | 'advanced'
-
-export type MeditationTab = 'library' | 'for-you' | 'progress' 
+} 

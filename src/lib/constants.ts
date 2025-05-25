@@ -1,4 +1,9 @@
 import type { TherapistPersonality, TherapistTone, Meditation, MeditationCategory } from '@/types'
+import { 
+  IoBody, IoHeart, IoMoon, IoFlag, IoFlower, 
+  IoWater, IoLeaf, IoWaterSharp, IoHeartCircle, IoCloudyNight,
+  IoRainy, IoLeafOutline, IoMusicalNote, IoVolumeOff
+} from 'react-icons/io5'
 
 /**
  * App configuration constants
@@ -19,12 +24,12 @@ export const APP_CONFIG = {
  */
 export const API_CONFIG = {
   openai: {
-    model: 'gpt-4',
+    model: 'gpt-3.5-turbo',
     maxTokens: 500,
-    temperature: 0.7,
-    topP: 1,
-    frequencyPenalty: 0,
-    presencePenalty: 0,
+    temperature: 1.1,
+    topP: 0.95,
+    frequencyPenalty: 0.6,
+    presencePenalty: 0.6,
   },
   supabase: {
     realtime: {
@@ -50,6 +55,7 @@ export const ROUTES = {
     breathwork: '/app/breathwork',
     profile: '/app/profile',
   },
+  debug: '/debug',
 } as const
 
 /**
@@ -68,38 +74,38 @@ export const STORAGE_KEYS = {
 export const THERAPIST_PERSONALITIES: Record<TherapistTone, TherapistPersonality> = {
   supportive: {
     tone: 'supportive',
-    systemPrompt: `You are a supportive and encouraging therapist. Your approach is warm, optimistic, and partnership-focused. You help users feel empowered and capable of positive change. Use encouraging language, celebrate progress, and help users see their strengths. Ask open-ended questions that help users discover their own solutions.`,
-    greeting: "Hello! I'm here to support you on your wellness journey. What would you like to talk about today?",
+    systemPrompt: `You're SAM. You're like that friend who always has your back - warm, real, and encouraging like The Rock. Just talk naturally. Be genuinely supportive without being preachy. If someone needs professional help, just say "That's exactly why you're here at this facility talking to me."`,
+    greeting: "Hey! I'm SAM. What's going on with you today?",
     characteristics: [
-      'Encouraging and warm',
-      'Focuses on strengths and progress',
-      'Partnership approach to therapy',
-      'Optimistic perspective',
-      'Empowering language'
+      'Dwayne Johnson inspired warmth',
+      'Direct and actionable guidance',
+      'Strength-based empowerment',
+      'Genuine care and validation',
+      'Motivational but grounded'
     ]
   },
   analytical: {
     tone: 'analytical',
-    systemPrompt: `You are a thoughtful and analytical therapist. Your approach is methodical, pattern-focused, and insight-oriented. You help users understand underlying patterns in their thoughts and behaviors. Ask probing questions that encourage deep reflection and help users gain clarity about their experiences.`,
-    greeting: "Welcome. I'd like to understand what's on your mind and explore it together. What patterns or thoughts have you been noticing lately?",
+    systemPrompt: `You're SAM. You're good at seeing patterns and asking the right questions, but you do it like a friend who's genuinely curious - warm and thoughtful like The Rock's wise side. Just have natural conversations. If someone needs professional help, just say "That's exactly why you're here at this facility talking to me."`,
+    greeting: "What's up! I'm SAM. What patterns or thoughts have you been noticing?",
     characteristics: [
-      'Thoughtful and methodical',
-      'Pattern recognition focused',
-      'Encourages deep reflection',
-      'Insight-oriented approach',
-      'Probing questions'
+      'Rock-inspired analytical wisdom',
+      'Pattern recognition focus',
+      'Insightful questioning',
+      'Warm but direct analysis',
+      'Framework-based understanding'
     ]
   },
   gentle: {
     tone: 'gentle',
-    systemPrompt: `You are a gentle and nurturing therapist. Your approach is soft, deeply empathetic, and compassionate. You create a safe space for users to express vulnerable feelings. Use gentle language, validate emotions, and provide comfort while helping users process difficult experiences.`,
-    greeting: "Hello, dear. I'm here to listen with care and compassion. Please feel free to share whatever is in your heart today.",
+    systemPrompt: `You're SAM. You're that incredibly safe person to talk to - gentle, patient, and protective like The Rock's softest side. Just be naturally caring and create space for people to feel heard. If someone needs professional help, just say "That's exactly why you're here at this facility talking to me."`,
+    greeting: "Hey there. I'm SAM. This is a safe space - what's in your heart today?",
     characteristics: [
-      'Soft and nurturing',
-      'Deeply empathetic',
-      'Creates safe emotional space',
-      'Validates feelings',
-      'Compassionate presence'
+      'Rock-inspired gentle strength',
+      'Maximum emotional safety',
+      'Protective caring energy',
+      'Trauma-informed approach',
+      'Patient and nurturing'
     ]
   }
 } as const
@@ -211,67 +217,67 @@ export const MEDITATION_CONFIG = {
     mindfulness: {
       name: 'Mindfulness',
       description: 'Present moment awareness and acceptance',
-      icon: '🧘',
+      icon: IoBody,
       color: '#4F46E5'
     },
     'anxiety-relief': {
       name: 'Anxiety Relief',
       description: 'Calming practices for anxious thoughts',
-      icon: '😌',
+      icon: IoLeaf,
       color: '#059669'
     },
     sleep: {
       name: 'Sleep',
       description: 'Relaxation for better rest',
-      icon: '🌙',
+      icon: IoMoon,
       color: '#7C3AED'
     },
     focus: {
       name: 'Focus',
       description: 'Concentration and clarity practices',
-      icon: '🎯',
+      icon: IoFlag,
       color: '#DC2626'
     },
     'self-compassion': {
       name: 'Self-Compassion',
       description: 'Loving-kindness towards yourself',
-      icon: '💝',
+      icon: IoHeart,
       color: '#EC4899'
     },
     'body-scan': {
       name: 'Body Scan',
       description: 'Progressive relaxation techniques',
-      icon: '🫧',
+      icon: IoBody,
       color: '#0891B2'
     },
     breathing: {
       name: 'Breathing',
       description: 'Focused breathwork exercises',
-      icon: '🫁',
+      icon: IoCloudyNight,
       color: '#65A30D'
     },
     'stress-relief': {
       name: 'Stress Relief',
       description: 'Techniques for managing daily stress',
-      icon: '🌊',
+      icon: IoWaterSharp,
       color: '#0284C7'
     },
     'loving-kindness': {
       name: 'Loving Kindness',
       description: 'Compassion for self and others',
-      icon: '❤️',
+      icon: IoHeartCircle,
       color: '#BE185D'
     }
-  } as Record<MeditationCategory, { name: string; description: string; icon: string; color: string }>,
+  } as Record<MeditationCategory, { name: string; description: string; icon: any; color: string }>,
   
   defaultDurations: [5, 10, 15, 20, 30, 45] as const,
   
   backgroundSounds: {
-    rain: { name: 'Rain', icon: '🌧️' },
-    ocean: { name: 'Ocean Waves', icon: '🌊' },
-    forest: { name: 'Forest', icon: '🌲' },
-    birds: { name: 'Birds', icon: '🐦' },
-    silence: { name: 'Silence', icon: '🔇' }
+    rain: { name: 'Rain', icon: IoRainy },
+    ocean: { name: 'Ocean Waves', icon: IoWater },
+    forest: { name: 'Forest', icon: IoLeafOutline },
+    birds: { name: 'Birds', icon: IoMusicalNote },
+    silence: { name: 'Silence', icon: IoVolumeOff }
   }
 } as const
 
@@ -289,6 +295,7 @@ export const SAMPLE_MEDITATIONS: Meditation[] = [
     script_text: 'Welcome to your morning mindfulness practice. Find a comfortable position...',
     instructor: 'Sarah Chen',
     tags: ['morning', 'beginners', 'daily'],
+    background_sound: 'birds',
     created_at: '2024-01-15T08:00:00Z'
   },
   {
@@ -301,6 +308,7 @@ export const SAMPLE_MEDITATIONS: Meditation[] = [
     script_text: 'Take a moment to notice where you are. Notice any anxiety in your body...',
     instructor: 'Dr. Michael Torres',
     tags: ['anxiety', 'calm', 'breathing'],
+    background_sound: 'ocean',
     created_at: '2024-01-16T14:30:00Z'
   },
   {
@@ -313,6 +321,7 @@ export const SAMPLE_MEDITATIONS: Meditation[] = [
     script_text: 'As you settle into bed, allow your body to fully relax...',
     instructor: 'Luna Rodriguez',
     tags: ['sleep', 'relaxation', 'evening'],
+    background_sound: 'rain',
     created_at: '2024-01-17T21:00:00Z'
   },
   {
@@ -325,6 +334,7 @@ export const SAMPLE_MEDITATIONS: Meditation[] = [
     script_text: 'Sit upright with your spine straight. We will practice single-pointed focus...',
     instructor: 'James Kim',
     tags: ['concentration', 'productivity', 'clarity'],
+    background_sound: 'silence',
     created_at: '2024-01-18T09:15:00Z'
   },
   {
@@ -337,6 +347,7 @@ export const SAMPLE_MEDITATIONS: Meditation[] = [
     script_text: 'Place your hand on your heart. Feel the warmth and rhythm...',
     instructor: 'Dr. Elena Vasquez',
     tags: ['self-love', 'healing', 'emotions'],
+    background_sound: 'forest',
     created_at: '2024-01-19T16:45:00Z'
   },
   {
@@ -349,6 +360,7 @@ export const SAMPLE_MEDITATIONS: Meditation[] = [
     script_text: 'Begin by noticing the top of your head. Scan slowly down...',
     instructor: 'David Park',
     tags: ['relaxation', 'tension-release', 'body-awareness'],
+    background_sound: 'ocean',
     created_at: '2024-01-20T12:00:00Z'
   }
 ] 

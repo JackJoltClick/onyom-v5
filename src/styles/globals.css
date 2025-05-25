@@ -1,4 +1,15 @@
-/* Reset and base styles */
+/* ================================
+   ONYOM GLOBAL STYLES
+   Therapeutic & Mindful Design
+   ================================ */
+
+/* Import the design system tokens */
+@import './design-system.css';
+
+/* ================================
+   RESET & BASE STYLES
+   ================================ */
+
 *,
 *::before,
 *::after {
@@ -7,187 +18,250 @@
   padding: 0;
 }
 
-/* CSS Custom Properties for theming */
-:root {
-  /* Colors */
-  --background-color: #1c1c1c;
-  --surface-color: #2a2a2a;
-  --surface-color-light: #3a3a3a;
-  --text-color: #ffffff;
-  --text-color-light: #b3b3b3;
-  --text-color-muted: #808080;
-  --accent-color: #4f46e5;
-  --accent-color-hover: #4338ca;
-  --accent-color-light: rgba(79, 70, 229, 0.1);
-  --border-color: #404040;
-  --border-color-light: #525252;
-  --success-color: #10b981;
-  --error-color: #ef4444;
-  --warning-color: #f59e0b;
+/* ================================
+   LEGACY VARIABLE MAPPING
+   Backward compatibility with existing components
+   ================================ */
 
-  /* New theme variables for consistent theming */
-  --bg-primary: var(--background-color);
-  --bg-secondary: var(--surface-color);
-  --bg-tertiary: var(--surface-color-light);
-  --text-primary: var(--text-color);
-  --text-secondary: var(--text-color-light);
-  --text-muted: var(--text-color-muted);
-  --accent-primary: var(--accent-color);
-  --accent-secondary: #7c3aed;
-  --accent-primary-rgb: 79, 70, 229;
-  --bg-primary-rgb: 28, 28, 28;
-  --accent-bg: var(--accent-color-light);
-  --border-primary: var(--border-color);
-  --border-secondary: var(--border-color-light);
+:root {
+  /* Map old variables to new design tokens */
+  --background-color: var(--onyom-bg-deep);
+  --surface-color: var(--onyom-bg-surface);
+  --surface-color-light: var(--onyom-bg-elevated);
+  --text-color: var(--onyom-text-primary);
+  --text-color-light: var(--onyom-text-secondary);
+  --text-color-muted: var(--onyom-text-muted);
+  --accent-color: var(--onyom-accent-primary);
+  --accent-color-hover: var(--onyom-accent-primary-hover);
+  --accent-color-light: var(--onyom-accent-primary-light);
+  --border-color: var(--onyom-border-soft);
+  --border-color-light: var(--onyom-border-medium);
+  --success-color: var(--onyom-success);
+  --error-color: var(--onyom-error);
+  --warning-color: var(--onyom-warning);
+
+  /* Updated theme variables for consistency */
+  --bg-primary: var(--onyom-bg-deep);
+  --bg-secondary: var(--onyom-bg-surface);
+  --bg-tertiary: var(--onyom-bg-elevated);
+  --text-primary: var(--onyom-text-primary);
+  --text-secondary: var(--onyom-text-secondary);
+  --text-muted: var(--onyom-text-muted);
+  --accent-primary: var(--onyom-accent-primary);
+  --accent-secondary: var(--onyom-sage);
+  --accent-primary-rgb: var(--onyom-accent-primary-rgb);
+  --bg-primary-rgb: 21, 26, 35;
+  --accent-bg: var(--onyom-accent-primary-light);
+  --border-primary: var(--onyom-border-soft);
+  --border-secondary: var(--onyom-border-medium);
 
   /* Error Boundary specific variables */
-  --bg-hover: rgba(255, 255, 255, 0.05);
-  --text-error: #ef4444;
-  --bg-code: rgba(0, 0, 0, 0.1);
+  --bg-hover: var(--onyom-bg-interactive);
+  --text-error: var(--onyom-error);
+  --bg-code: var(--onyom-bg-elevated);
 
-  /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
+  /* Spacing - Map to new scale */
+  --spacing-xs: var(--onyom-space-1);
+  --spacing-sm: var(--onyom-space-2);
+  --spacing-md: var(--onyom-space-4);
+  --spacing-lg: var(--onyom-space-6);
+  --spacing-xl: var(--onyom-space-8);
+  --spacing-2xl: var(--onyom-space-12);
 
-  /* Typography */
-  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-md: 16px;
-  --font-size-lg: 18px;
-  --font-size-xl: 20px;
-  --font-size-2xl: 24px;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
+  /* Typography - Map to new scale */
+  --font-family-sans: var(--onyom-font-family-primary);
+  --font-size-xs: var(--onyom-text-xs);
+  --font-size-sm: var(--onyom-text-sm);
+  --font-size-md: var(--onyom-text-base);
+  --font-size-lg: var(--onyom-text-lg);
+  --font-size-xl: var(--onyom-text-xl);
+  --font-size-2xl: var(--onyom-text-2xl);
+  --font-weight-normal: var(--onyom-font-weight-normal);
+  --font-weight-medium: var(--onyom-font-weight-medium);
+  --font-weight-semibold: var(--onyom-font-weight-semibold);
+  --font-weight-bold: var(--onyom-font-weight-bold);
+  --line-height-tight: var(--onyom-leading-tight);
+  --line-height-normal: var(--onyom-leading-normal);
+  --line-height-relaxed: var(--onyom-leading-relaxed);
 
-  /* Layout */
-  --border-radius: 8px;
-  --border-radius-sm: 4px;
-  --border-radius-lg: 12px;
-  --border-radius-xl: 16px;
-  --border-radius-full: 9999px;
+  /* Layout - Map to new scale */
+  --border-radius: var(--onyom-radius-base);
+  --border-radius-sm: var(--onyom-radius-sm);
+  --border-radius-lg: var(--onyom-radius-lg);
+  --border-radius-xl: var(--onyom-radius-xl);
+  --border-radius-full: var(--onyom-radius-full);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  /* Shadows - Map to new scale */
+  --shadow-sm: var(--onyom-shadow-sm);
+  --shadow-md: var(--onyom-shadow-base);
+  --shadow-lg: var(--onyom-shadow-lg);
 
-  /* Transitions */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
-  --transition-slow: 350ms ease-in-out;
+  /* Transitions - Map to new timing */
+  --transition-fast: var(--onyom-duration-fast) var(--onyom-ease-out);
+  --transition-normal: var(--onyom-duration-normal) var(--onyom-ease-out);
+  --transition-slow: var(--onyom-duration-slow) var(--onyom-ease-out);
 
   /* Safe areas for mobile */
-  --safe-area-inset-top: env(safe-area-inset-top, 0px);
-  --safe-area-inset-right: env(safe-area-inset-right, 0px);
-  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-top: var(--onyom-safe-top);
+  --safe-area-inset-right: var(--onyom-safe-right);
+  --safe-area-inset-bottom: var(--onyom-safe-bottom);
+  --safe-area-inset-left: var(--onyom-safe-left);
 
-  /* App-specific */
-  --header-height: 60px;
-  --tab-bar-height: 70px;
+  /* App-specific layout */
+  --header-height: var(--onyom-header-height);
+  --tab-bar-height: var(--onyom-navigation-height);
   --bottom-nav-height: 80px;
   --chat-input-height: 60px;
-  --content-max-width: 768px;
+  --content-max-width: var(--onyom-content-2xl);
 }
 
-/* Light theme */
+/* ================================
+   LIGHT THEME OVERRIDES
+   ================================ */
+
 [data-theme="light"] {
-  --background-color: #ffffff;
-  --surface-color: #f8f9fa;
-  --surface-color-light: #e9ecef;
-  --text-color: #1a1a1a;
-  --text-color-light: #6b7280;
-  --text-color-muted: #9ca3af;
-  --border-color: #e5e7eb;
-  --border-color-light: #d1d5db;
-  --accent-color-light: rgba(79, 70, 229, 0.08);
+  --background-color: var(--onyom-light-bg-deep);
+  --surface-color: var(--onyom-light-bg-surface);
+  --surface-color-light: var(--onyom-light-bg-elevated);
+  --text-color: var(--onyom-light-text-primary);
+  --text-color-light: var(--onyom-light-text-secondary);
+  --text-color-muted: #6B7280;
+  --border-color: var(--onyom-light-border-subtle);
+  --border-color-light: rgba(45, 55, 72, 0.12);
+  --accent-color-light: rgba(105, 152, 176, 0.08);
 
-  /* Light theme overrides for new variables */
-  --bg-primary: var(--background-color);
-  --bg-secondary: var(--surface-color);
-  --bg-tertiary: var(--surface-color-light);
-  --text-primary: var(--text-color);
-  --text-secondary: var(--text-color-light);
-  --text-muted: var(--text-color-muted);
-  --border-primary: var(--border-color);
-  --border-secondary: var(--border-color-light);
-  --bg-primary-rgb: 255, 255, 255;
-  --accent-bg: var(--accent-color-light);
+  /* Update mapped variables */
+  --bg-primary: var(--onyom-light-bg-deep);
+  --bg-secondary: var(--onyom-light-bg-surface);
+  --bg-tertiary: var(--onyom-light-bg-elevated);
+  --text-primary: var(--onyom-light-text-primary);
+  --text-secondary: var(--onyom-light-text-secondary);
+  --border-primary: var(--onyom-light-border-subtle);
+  --border-secondary: rgba(45, 55, 72, 0.12);
+  --bg-primary-rgb: 253, 252, 251;
+  --accent-bg: rgba(105, 152, 176, 0.08);
 
-  /* Light theme error boundary overrides */
+  /* Light theme specific overrides */
   --bg-hover: rgba(0, 0, 0, 0.05);
   --bg-code: rgba(0, 0, 0, 0.03);
 }
 
-/* Base HTML elements */
+/* ================================
+   BASE HTML ELEMENTS
+   ================================ */
+
 html {
-  font-family: var(--font-family-sans);
-  line-height: var(--line-height-normal);
-  color: var(--text-color);
-  background-color: var(--background-color);
+  font-family: var(--onyom-font-family-primary);
+  line-height: var(--onyom-leading-normal);
+  color: var(--onyom-text-primary);
+  background-color: var(--onyom-bg-deep);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: var(--font-size-md);
+  font-size: var(--onyom-text-base);
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
   min-height: 100vh;
   margin: 0;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: var(--onyom-bg-deep);
+  color: var(--onyom-text-primary);
   overflow-x: hidden;
   position: relative;
+  
+  /* Enhanced font rendering */
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1;
+  font-variant-ligatures: common-ligatures;
 }
 
-/* App root container */
+/* ================================
+   APP CONTAINER
+   ================================ */
+
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
+  background: var(--onyom-bg-deep);
 }
 
-/* Typography */
+/* ================================
+   TYPOGRAPHY SYSTEM
+   ================================ */
+
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  color: var(--text-color);
+  font-weight: var(--onyom-font-weight-semibold);
+  line-height: var(--onyom-leading-tight);
+  color: var(--onyom-text-primary);
+  font-family: var(--onyom-font-family-primary);
 }
 
-h1 { font-size: var(--font-size-2xl); }
-h2 { font-size: var(--font-size-xl); }
-h3 { font-size: var(--font-size-lg); }
-h4 { font-size: var(--font-size-md); }
+h1 { 
+  font-size: var(--onyom-text-4xl); 
+  font-weight: var(--onyom-font-weight-bold);
+  letter-spacing: -0.025em;
+}
+
+h2 { 
+  font-size: var(--onyom-text-3xl); 
+  letter-spacing: -0.025em;
+}
+
+h3 { 
+  font-size: var(--onyom-text-2xl); 
+}
+
+h4 { 
+  font-size: var(--onyom-text-xl); 
+}
+
+h5 { 
+  font-size: var(--onyom-text-lg); 
+}
+
+h6 { 
+  font-size: var(--onyom-text-base); 
+  font-weight: var(--onyom-font-weight-medium);
+}
 
 p {
   margin: 0;
-  line-height: var(--line-height-normal);
+  line-height: var(--onyom-leading-relaxed);
+  color: var(--onyom-text-secondary);
 }
+
+/* ================================
+   INTERACTIVE ELEMENTS
+   ================================ */
 
 /* Links */
 a {
-  color: var(--accent-color);
+  color: var(--onyom-accent-primary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--onyom-duration-fast) var(--onyom-ease-out);
+  border-radius: var(--onyom-radius-sm);
 }
 
 a:hover {
-  color: var(--accent-color-hover);
+  color: var(--onyom-accent-primary-hover);
 }
 
-/* Buttons */
+a:focus-visible {
+  outline: 2px solid var(--onyom-accent-primary);
+  outline-offset: 2px;
+}
+
+/* Buttons - Base reset */
 button {
   font-family: inherit;
   cursor: pointer;
@@ -196,94 +270,121 @@ button {
   padding: 0;
   margin: 0;
   outline: none;
+  color: inherit;
+  border-radius: var(--onyom-radius-base);
 }
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+button:focus-visible {
+  outline: 2px solid var(--onyom-accent-primary);
+  outline-offset: 2px;
 }
 
-/* Form elements */
+/* ================================
+   FORM ELEMENTS
+   ================================ */
+
 input, textarea, select {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-  color: var(--text-color);
-  background-color: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-sm) var(--spacing-md);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  color: var(--onyom-text-primary);
+  background-color: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-base);
+  padding: var(--onyom-space-3);
+  transition: border-color var(--onyom-duration-fast) var(--onyom-ease-out);
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px var(--accent-color-light);
+  border-color: var(--onyom-accent-primary);
+  box-shadow: 0 0 0 3px var(--onyom-accent-primary-light);
 }
 
 input::placeholder, textarea::placeholder {
-  color: var(--text-color-muted);
+  color: var(--onyom-text-muted);
+  opacity: 1;
 }
 
-/* Lists */
+/* ================================
+   LISTS
+   ================================ */
+
 ul, ol {
-  list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* Images */
+/* ================================
+   MEDIA ELEMENTS
+   ================================ */
+
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
-/* Scrollbars */
+/* ================================
+   SCROLLBAR STYLING
+   ================================ */
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--surface-color);
+  background: var(--onyom-bg-surface);
+  border-radius: var(--onyom-radius-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: var(--border-radius-full);
+  background: var(--onyom-border-medium);
+  border-radius: var(--onyom-radius-base);
+  transition: background var(--onyom-duration-fast) var(--onyom-ease-out);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-color-light);
+  background: var(--onyom-accent-primary);
 }
 
-/* Mobile-specific styles */
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
 @media (max-width: 768px) {
   html {
-    font-size: var(--font-size-sm);
+    font-size: var(--onyom-text-sm);
   }
-
-  /* Prevent zoom on input focus */
+  
+  /* Ensure touch targets are accessible on mobile */
   input[type="text"],
   input[type="email"],
   input[type="password"],
-  textarea {
-    font-size: 16px;
+  textarea,
+  button {
+    min-height: var(--onyom-touch-target);
   }
 }
 
-/* Touch targets */
+/* Enhanced touch experience */
 @media (hover: none) and (pointer: coarse) {
   button, 
-  [role="button"],
-  a {
-    min-height: 44px;
-    min-width: 44px;
+  a,
+  input,
+  textarea,
+  [role="button"] {
+    min-height: var(--onyom-touch-target);
+    min-width: var(--onyom-touch-target);
   }
 }
 
-/* Utility classes */
+/* ================================
+   ACCESSIBILITY UTILITIES
+   ================================ */
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -296,14 +397,21 @@ img {
   border: 0;
 }
 
+/* ================================
+   LAYOUT UTILITIES
+   ================================ */
+
 .container {
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--onyom-space-4);
 }
 
-/* Animation utilities */
+/* ================================
+   ANIMATION KEYFRAMES
+   ================================ */
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -312,7 +420,7 @@ img {
 @keyframes slideUp {
   from { 
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to { 
     opacity: 1;
@@ -322,17 +430,53 @@ img {
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.7; }
 }
 
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ================================
+   ANIMATION UTILITIES
+   ================================ */
+
 .animate-fade-in {
-  animation: fadeIn var(--transition-normal) ease-out;
+  animation: fadeIn var(--onyom-duration-normal) var(--onyom-ease-out);
 }
 
 .animate-slide-up {
-  animation: slideUp var(--transition-normal) ease-out;
+  animation: slideUp var(--onyom-duration-normal) var(--onyom-ease-out);
 }
 
 .animate-pulse {
-  animation: pulse 2s infinite;
+  animation: pulse var(--onyom-duration-breath) var(--onyom-ease-breath) infinite;
+}
+
+.animate-bounce {
+  animation: gentle-bounce 2s var(--onyom-ease-out) infinite;
+}
+
+/* ================================
+   SELECTION STYLING
+   ================================ */
+
+::selection {
+  background-color: var(--onyom-accent-primary-light);
+  color: var(--onyom-text-primary);
+}
+
+/* ================================
+   FOCUS MANAGEMENT
+   ================================ */
+
+.focus-ring {
+  transition: box-shadow var(--onyom-duration-fast) var(--onyom-ease-out);
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px var(--onyom-accent-primary-light);
+  outline: 2px solid var(--onyom-accent-primary);
+  outline-offset: 2px;
 } 

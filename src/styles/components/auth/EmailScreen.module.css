@@ -1,0 +1,250 @@
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  position: relative;
+}
+
+/* Back button */
+.backButton {
+  position: absolute;
+  top: var(--onyom-space-4);
+  left: var(--onyom-space-4);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.backButton:hover {
+  background: var(--onyom-accent-primary);
+  color: white;
+  box-shadow: var(--onyom-shadow-md);
+}
+
+.backButton svg {
+  font-size: 1.25rem;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--onyom-space-6);
+  text-align: center;
+}
+
+/* Icon */
+.iconContainer {
+  margin-bottom: var(--onyom-space-6);
+}
+
+.icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: var(--onyom-shadow-lg);
+}
+
+.icon svg {
+  font-size: 2rem;
+  color: white;
+}
+
+/* Typography */
+.title {
+  font-size: var(--onyom-text-3xl);
+  font-weight: var(--onyom-font-bold);
+  color: var(--onyom-text-primary);
+  margin-bottom: var(--onyom-space-4);
+}
+
+.subtitle {
+  font-size: var(--onyom-text-base);
+  color: var(--onyom-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--onyom-space-8);
+  max-width: 400px;
+}
+
+/* Form */
+.form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.inputContainer {
+  margin-bottom: var(--onyom-space-6);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--onyom-bg-surface);
+  border: 2px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-xl);
+  padding: var(--onyom-space-4);
+  transition: all 0.3s ease;
+}
+
+.inputWrapper.focused {
+  border-color: var(--onyom-accent-primary);
+  box-shadow: 0 0 0 4px rgba(105, 152, 176, 0.1);
+}
+
+.inputWrapper.valid {
+  border-color: var(--onyom-success);
+}
+
+.inputIcon {
+  font-size: 1.25rem;
+  color: var(--onyom-text-muted);
+  margin-right: var(--onyom-space-3);
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: var(--onyom-text-base);
+  color: var(--onyom-text-primary);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--onyom-text-muted);
+}
+
+.validIcon {
+  color: var(--onyom-success);
+  font-size: 1.25rem;
+  margin-left: var(--onyom-space-2);
+}
+
+.errorMessage {
+  margin-top: var(--onyom-space-2);
+  padding: var(--onyom-space-2) var(--onyom-space-3);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--onyom-error);
+  border-radius: var(--onyom-radius-md);
+  color: var(--onyom-error);
+  font-size: var(--onyom-text-sm);
+  text-align: left;
+}
+
+/* Button */
+.buttonContainer {
+  margin-bottom: var(--onyom-space-6);
+}
+
+.continueButton {
+  width: 100%;
+  padding: var(--onyom-space-4) var(--onyom-space-6);
+  font-size: var(--onyom-text-lg);
+  font-weight: var(--onyom-font-semibold);
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
+  border: none;
+  border-radius: var(--onyom-radius-xl);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.continueButton:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-lg);
+}
+
+/* Help text */
+.helpText {
+  font-size: var(--onyom-text-sm);
+  color: var(--onyom-text-muted);
+  text-align: center;
+}
+
+/* Background elements */
+.backgroundElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.floatingElement1,
+.floatingElement2 {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
+  border-radius: 50%;
+  opacity: 0.1;
+}
+
+.floatingElement1 {
+  top: 20%;
+  right: 10%;
+}
+
+.floatingElement2 {
+  bottom: 30%;
+  left: 15%;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .content {
+    padding: var(--onyom-space-4);
+  }
+  
+  .title {
+    font-size: var(--onyom-text-2xl);
+  }
+  
+  .subtitle {
+    font-size: var(--onyom-text-sm);
+  }
+  
+  .inputWrapper {
+    padding: var(--onyom-space-3);
+  }
+  
+  .backButton {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .icon svg {
+    font-size: 1.75rem;
+  }
+} 

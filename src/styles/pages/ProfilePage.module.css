@@ -1,68 +1,117 @@
+/* Container */
 .container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  overflow-y: auto;
+  min-height: 100vh;
+  background: var(--onyom-bg-primary);
+  padding-bottom: 100px; /* Space for bottom nav */
 }
 
-.content {
-  flex: 1;
-  padding: 2rem 1rem;
-  max-width: 600px;
-  margin: 0 auto;
-  width: 100%;
-}
-
+/* Header */
 .header {
+  padding: var(--onyom-space-8) var(--onyom-space-4) var(--onyom-space-6);
   text-align: center;
-  margin-bottom: 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--onyom-bg-primary) 0%,
+    var(--onyom-bg-surface) 100%
+  );
+}
+
+.headerContent {
+  max-width: 420px;
+  margin: 0 auto;
 }
 
 .title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
+  margin: 0 0 var(--onyom-space-2) 0;
+  background: linear-gradient(
+    135deg,
+    var(--onyom-text-primary),
+    var(--onyom-accent-primary)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .subtitle {
-  font-size: 1.125rem;
-  color: var(--text-secondary);
+  font-size: 1rem;
+  color: var(--onyom-text-secondary);
+  line-height: 1.6;
+  margin: 0;
   font-weight: 400;
 }
 
-/* User Card */
-.userCard {
+/* Main */
+.main {
+  padding: 0 var(--onyom-space-4);
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-8);
+}
+
+/* Hero Section */
+.heroSection {
+  margin-bottom: var(--onyom-space-2);
+}
+
+.heroCard {
+  background: var(--onyom-bg-surface);
+  border-radius: var(--onyom-radius-xl);
+  border: 1px solid var(--onyom-border-soft);
+  overflow: hidden;
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--onyom-shadow-lg);
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.005); }
+}
+
+.heroContent {
+  padding: var(--onyom-space-6);
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--onyom-space-6);
+}
+
+.userProfile {
   display: flex;
   align-items: center;
-  padding: 2rem;
-  background: var(--bg-secondary);
-  border-radius: 1rem;
-  border: 1px solid var(--border-primary);
-  margin-bottom: 2rem;
-  gap: 1.5rem;
+  gap: var(--onyom-space-4);
 }
 
 .avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: var(--onyom-shadow-md);
+  border: 3px solid var(--onyom-bg-surface);
 }
 
 .avatarText {
   font-size: 2rem;
   font-weight: 700;
   color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .userInfo {
@@ -72,98 +121,365 @@
 .userName {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
-  color: var(--text-primary);
+  margin: 0 0 var(--onyom-space-1) 0;
+  color: var(--onyom-text-primary);
 }
 
 .userEmail {
-  font-size: 1rem;
-  color: var(--text-secondary);
+  font-size: 0.875rem;
+  color: var(--onyom-text-secondary);
+  margin: 0 0 var(--onyom-space-2) 0;
 }
 
-/* Settings Section */
-.settingsSection {
-  margin-bottom: 2rem;
+.userLevel {
+  display: flex;
+  align-items: center;
+  gap: var(--onyom-space-1);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--onyom-accent-primary);
+  background: var(--onyom-accent-primary);
+  background-opacity: 0.1;
+  padding: var(--onyom-space-1) var(--onyom-space-3);
+  border-radius: var(--onyom-radius-full);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--onyom-accent-primary);
+  border-opacity: 0.2;
+  width: fit-content;
+}
+
+.levelIcon {
+  font-size: 1rem;
+}
+
+/* Level Progress */
+.levelProgress {
+  width: 100%;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--onyom-space-2);
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--onyom-text-primary);
+}
+
+.progressPoints {
+  font-size: 0.75rem;
+  color: var(--onyom-text-secondary);
+  font-weight: 500;
+}
+
+.progressTrack {
+  height: 8px;
+  background: var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--onyom-accent-primary) 0%,
+    var(--onyom-sage) 100%
+  );
+  border-radius: var(--onyom-radius-full);
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.heroVisual {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.heroGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    var(--onyom-accent-primary) 100%
+  );
+  opacity: 0.1;
+}
+
+.heroPattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 50%, var(--onyom-sage) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, var(--onyom-beige) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 80%, var(--onyom-accent-primary) 0%, transparent 50%);
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+/* Progress Section */
+.progressSection {
+  margin-bottom: var(--onyom-space-2);
 }
 
 .sectionTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
+  color: var(--onyom-text-primary);
+  margin: 0 0 var(--onyom-space-4) 0;
 }
 
-.settingItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem;
-  background: var(--bg-secondary);
-  border-radius: 0.75rem;
-  border: 1px solid var(--border-primary);
-  margin-bottom: 0.75rem;
+.progressGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--onyom-space-4);
 }
 
-.settingInfo {
+.progressCard {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-lg);
+  padding: var(--onyom-space-5);
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-}
-
-.settingLabel {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.settingValue {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.settingButton {
-  padding: 0.5rem 1rem;
-  background: var(--accent-primary);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
+  align-items: center;
+  text-align: center;
+  gap: var(--onyom-space-3);
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.settingButton:hover {
-  background: var(--accent-color-hover);
-  transform: translateY(-1px);
+.progressCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--onyom-shadow-md);
+}
+
+.progressCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--onyom-accent-primary), var(--onyom-sage));
+}
+
+.progressIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.progressContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--onyom-space-1);
+}
+
+.progressValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--onyom-text-primary);
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  color: var(--onyom-text-secondary);
+  font-weight: 500;
+}
+
+/* Goal Section */
+.goalSection {
+  margin-bottom: var(--onyom-space-2);
+}
+
+.goalCard {
+  background: var(--onyom-bg-surface);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-lg);
+  padding: var(--onyom-space-6);
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.goalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--onyom-space-4);
+}
+
+.goalInfo {
+  flex: 1;
+}
+
+.goalTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
+  margin: 0 0 var(--onyom-space-1) 0;
+}
+
+.goalDescription {
+  font-size: 0.875rem;
+  color: var(--onyom-text-secondary);
+  margin: 0;
+}
+
+.goalIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--onyom-accent-primary), var(--onyom-sage));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.goalProgress {
+  display: flex;
+  align-items: center;
+  gap: var(--onyom-space-3);
+}
+
+.goalTrack {
+  flex: 1;
+  height: 8px;
+  background: var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-full);
+  overflow: hidden;
+}
+
+.goalFill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--onyom-accent-primary) 0%,
+    var(--onyom-sage) 100%
+  );
+  border-radius: var(--onyom-radius-full);
+  position: relative;
+  overflow: hidden;
+}
+
+.goalFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+.goalPercentage {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
+  min-width: 40px;
+  text-align: right;
 }
 
 /* Actions Section */
 .actionsSection {
-  margin-bottom: 2rem;
+  margin-bottom: var(--onyom-space-2);
 }
 
+.actionButtons {
+  display: flex;
+  gap: var(--onyom-space-3);
+}
+
+.settingsButton,
 .signOutButton {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: var(--error-color);
-  color: white;
+  gap: var(--onyom-space-2);
+  padding: var(--onyom-space-4);
   border: none;
-  border-radius: 0.75rem;
-  font-size: 1rem;
+  border-radius: var(--onyom-radius-lg);
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 56px;
+}
+
+.settingsButton {
+  background: var(--onyom-bg-surface);
+  color: var(--onyom-text-primary);
+  border: 1px solid var(--onyom-border-soft);
+}
+
+.settingsButton:hover {
+  background: var(--onyom-bg-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.signOutButton {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: var(--onyom-shadow-sm);
 }
 
 .signOutButton:hover {
-  background: #dc2626;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  box-shadow: var(--onyom-shadow-md);
 }
 
 .signOutButton:disabled,
@@ -174,74 +490,109 @@
 }
 
 .signOutButton.loading:hover {
-  background: var(--error-color);
   transform: none;
-  box-shadow: none;
+  box-shadow: var(--onyom-shadow-sm);
 }
 
-.signOutIcon {
-  font-size: 1.25rem;
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 1rem;
-  border-top: 1px solid var(--border-primary);
-}
-
-.footerText {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-/* Dark theme adjustments */
-.dark .avatar {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.dark .signOutButton:hover {
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
-
-/* Mobile responsiveness */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .content {
-    padding: 1.5rem 1rem;
+  .main {
+    padding: 0 var(--onyom-space-3);
+    gap: var(--onyom-space-6);
   }
-  
+
+  .header {
+    padding: var(--onyom-space-6) var(--onyom-space-3) var(--onyom-space-4);
+  }
+
   .title {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
-  
-  .userCard {
-    padding: 1.5rem;
-    gap: 1rem;
+
+  .subtitle {
+    font-size: 0.875rem;
   }
-  
+
+  .heroCard {
+    min-height: 240px;
+  }
+
+  .heroContent {
+    padding: var(--onyom-space-4);
+    gap: var(--onyom-space-4);
+  }
+
+  .userProfile {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--onyom-space-3);
+  }
+
   .avatar {
-    width: 60px;
-    height: 60px;
+    width: 64px;
+    height: 64px;
   }
-  
+
   .avatarText {
     font-size: 1.5rem;
   }
-  
+
   .userName {
     font-size: 1.25rem;
   }
-  
-  .settingItem {
-    padding: 1rem;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
+
+  .heroVisual {
+    width: 30%;
   }
-  
-  .settingButton {
-    align-self: flex-end;
-    width: auto;
+
+  .progressGrid {
+    grid-template-columns: 1fr;
+    gap: var(--onyom-space-3);
+  }
+
+  .progressCard {
+    padding: var(--onyom-space-4);
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroCard {
+    min-height: 200px;
+  }
+
+  .heroContent {
+    padding: var(--onyom-space-3);
+  }
+
+  .goalCard {
+    padding: var(--onyom-space-4);
+  }
+
+  .actionButtons {
+    gap: var(--onyom-space-2);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .heroCard {
+    animation: none;
+  }
+
+  .heroPattern {
+    animation: none;
+  }
+
+  .progressFill::after,
+  .goalFill::after {
+    animation: none;
+  }
+
+  * {
+    transition: none !important;
   }
 } 

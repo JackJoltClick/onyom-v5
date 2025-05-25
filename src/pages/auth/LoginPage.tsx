@@ -1,10 +1,19 @@
 import React from 'react'
-import { LoginForm } from '@/components/auth/LoginForm'
+import { useNavigate } from 'react-router-dom'
+import { AuthFlow } from '@/components/auth/AuthFlow'
+import { ROUTES } from '@/lib/constants'
 
 export function LoginPage(): React.ReactElement {
+  const navigate = useNavigate()
+
+  const handleComplete = () => {
+    navigate(ROUTES.app.meditations)
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background-color to-surface-color">
-      <LoginForm />
-    </div>
+    <AuthFlow 
+      mode="login" 
+      onComplete={handleComplete}
+    />
   )
 } 

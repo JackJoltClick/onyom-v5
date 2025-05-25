@@ -1,113 +1,250 @@
+/* Main Player Container */
 .player {
   position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  right: 1rem;
+  bottom: 80px; /* Above bottom navigation */
+  left: 0;
+  right: 0;
+  background: var(--onyom-bg-surface);
+  border-top: 1px solid var(--onyom-border-soft);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: var(--onyom-space-4);
   z-index: 1000;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 1rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-  max-width: 400px;
-  margin: 0 auto;
+  box-shadow: var(--onyom-shadow-lg);
+  animation: slideUp 0.3s ease-out;
 }
 
-.playerContent {
-  padding: 1.5rem;
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-/* Meditation Info */
-.meditationInfo {
+/* Track Info Section */
+.trackInfo {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  gap: 1rem;
+  align-items: center;
+  gap: var(--onyom-space-3);
+  margin-bottom: var(--onyom-space-4);
 }
 
-.meditationDetails {
+.albumArt {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--onyom-radius-md);
+  background: linear-gradient(
+    135deg,
+    var(--onyom-accent-primary),
+    var(--onyom-accent-secondary)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--onyom-shadow-sm);
+}
+
+.categoryIcon {
+  color: var(--onyom-text-on-accent);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.trackDetails {
   flex: 1;
+  min-width: 0;
 }
 
-.title {
-  font-size: 1.125rem;
+.trackTitle {
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.3;
+  color: var(--onyom-text-primary);
+  margin: 0 0 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.metadata {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.category {
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.generatedBadge {
-  background: linear-gradient(135deg, #F59E0B, #D97706);
-  color: white;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.375rem;
-  font-size: 0.625rem;
-  font-weight: 600;
-}
-
-.duration {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  font-weight: 500;
+.trackArtist {
+  font-size: 0.8rem;
+  color: var(--onyom-text-secondary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .closeButton {
   background: none;
   border: none;
-  color: var(--text-secondary);
-  font-size: 1.25rem;
+  color: var(--onyom-text-secondary);
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  padding: var(--onyom-space-2);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
+  margin-left: var(--onyom-space-2);
 }
 
 .closeButton:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  color: var(--onyom-text-primary);
+  background: var(--onyom-bg-hover);
+  transform: scale(1.05);
+}
+
+.closeButton:active {
+  transform: scale(0.95);
 }
 
 /* Progress Section */
 .progressSection {
-  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: var(--onyom-space-3);
+  margin-bottom: var(--onyom-space-4);
 }
 
-.progressBar {
+.timeDisplay {
+  font-size: 0.75rem;
+  color: var(--onyom-text-secondary);
+  font-variant-numeric: tabular-nums;
+  min-width: 35px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.progressContainer {
+  flex: 1;
   position: relative;
-  height: 0.5rem;
-  background: var(--bg-tertiary);
-  border-radius: 0.25rem;
-  margin-bottom: 0.75rem;
+  padding: var(--onyom-space-2) 0;
+  cursor: pointer;
+}
+
+.progressTrack {
+  height: 6px;
+  background: var(--onyom-border-soft);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--onyom-accent-primary) 0%,
+    var(--onyom-accent-secondary) 100%
+  );
+  border-radius: 3px;
+  transition: width 0.1s ease-out;
+  position: relative;
   overflow: hidden;
 }
 
-.progress {
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progressColorLayer {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-  border-radius: 0.25rem;
-  transition: width 0.1s ease;
+  background: 
+    /* Create a smooth progression through therapeutic colors */
+    linear-gradient(
+      90deg,
+      var(--onyom-accent-primary) 0%,
+      var(--onyom-sage) 50%,
+      var(--onyom-beige) 100%
+    );
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.2s ease-out;
+  overflow: hidden;
+  opacity: 0.85;
+  mix-blend-mode: soft-light;
+  z-index: 1;
+}
+
+.progressColorLayer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  animation: therapeuticShimmer 3s infinite;
+}
+
+@keyframes therapeuticShimmer {
+  0% { 
+    transform: translateX(-100%); 
+    opacity: 0;
+  }
+  50% { 
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(100%); 
+    opacity: 0;
+  }
+}
+
+.progressThumb {
+  width: 14px;
+  height: 14px;
+  background: var(--onyom-accent-primary);
+  border: 2px solid var(--onyom-bg-surface);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    0 0 0 0 rgba(111, 152, 176, 0.3);
+  z-index: 2;
+}
+
+.progressContainer:hover .progressThumb {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 0 4px rgba(111, 152, 176, 0.2);
 }
 
 .progressInput {
@@ -126,207 +263,272 @@
   cursor: not-allowed;
 }
 
-.timeDisplay {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-/* Controls */
+/* Controls Section */
 .controls {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  gap: 1rem;
+  justify-content: center;
+  gap: var(--onyom-space-4);
 }
 
-.playbackControls {
+.controlButton {
+  background: none;
+  border: none;
+  color: var(--onyom-text-secondary);
+  cursor: pointer;
+  padding: var(--onyom-space-2);
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+}
+
+.controlButton:hover {
+  color: var(--onyom-text-primary);
+  background: var(--onyom-bg-hover);
+  transform: scale(1.05);
+}
+
+.controlButton:active {
+  transform: scale(0.95);
+}
+
+.controlButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .playButton {
-  width: 3rem;
-  height: 3rem;
+  background: var(--onyom-accent-primary);
+  color: var(--onyom-text-on-accent);
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--onyom-shadow-md);
+  position: relative;
+}
+
+.playButton:hover {
+  transform: scale(1.05);
+  box-shadow: var(--onyom-shadow-lg);
+}
+
+.playButton:active {
+  transform: scale(0.95);
+}
+
+.playButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Volume Controls */
+.volumeContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--onyom-space-2);
+}
+
+.volumeButton {
+  background: none;
+  border: none;
+  color: var(--onyom-text-secondary);
+  cursor: pointer;
+  padding: var(--onyom-space-2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.3);
+  transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
 }
 
-.stopButton {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-}
-
-.volumeControl {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 6rem;
-}
-
-.volumeIcon {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+.volumeButton:hover {
+  color: var(--onyom-text-primary);
+  background: var(--onyom-bg-hover);
 }
 
 .volumeSlider {
-  flex: 1;
-  height: 0.25rem;
-  background: var(--bg-tertiary);
-  border-radius: 0.125rem;
-  outline: none;
-  cursor: pointer;
-  -webkit-appearance: none;
+  width: 80px;
+  height: 3px;
   appearance: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.volumeSlider::-webkit-slider-track {
+  height: 3px;
+  background: var(--onyom-border-soft);
+  border-radius: 1.5px;
 }
 
 .volumeSlider::-webkit-slider-thumb {
-  -webkit-appearance: none;
   appearance: none;
-  width: 1rem;
-  height: 1rem;
+  width: 10px;
+  height: 10px;
+  background: var(--onyom-accent-primary);
   border-radius: 50%;
-  background: var(--accent-primary);
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.volumeSlider:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.volumeSlider::-moz-range-track {
+  height: 3px;
+  background: var(--onyom-border-soft);
+  border-radius: 1.5px;
+  border: none;
 }
 
 .volumeSlider::-moz-range-thumb {
-  width: 1rem;
-  height: 1rem;
+  width: 10px;
+  height: 10px;
+  background: var(--onyom-accent-primary);
   border-radius: 50%;
-  background: var(--accent-primary);
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Background Sounds */
-.backgroundSounds {
-  border-top: 1px solid var(--border-secondary);
-  padding-top: 1rem;
-}
-
-.backgroundLabel {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-  display: block;
-}
-
-.soundOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.soundOption {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-secondary);
-  border-radius: 0.5rem;
-  cursor: pointer;
+  opacity: 0;
   transition: all 0.2s ease;
-  font-size: 0.625rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  min-width: 3rem;
 }
 
-.soundOption:hover {
-  background: var(--bg-primary);
-  border-color: var(--accent-primary);
-  color: var(--text-primary);
+.volumeSlider:hover::-moz-range-thumb {
+  opacity: 1;
 }
 
-.soundOption.active {
-  background: var(--accent-bg);
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+/* Error States */
+.error,
+.audioMissing {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--onyom-space-3);
+  padding: var(--onyom-space-4);
+  margin: var(--onyom-space-4) 0;
+  border-radius: var(--onyom-radius-md);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
-.soundOption span:first-child {
+.error {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #DC2626;
+}
+
+.audioMissing {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #F59E0B;
+}
+
+.audioMissing div {
+  flex: 1;
+}
+
+.audioMissing p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.audioMissing p:first-child {
+  margin-bottom: var(--onyom-space-1);
+}
+
+/* Script Fallback */
+.scriptFallback {
+  margin-top: var(--onyom-space-6);
+  padding: var(--onyom-space-4);
+  background: var(--onyom-bg-primary);
+  border: 1px solid var(--onyom-border-soft);
+  border-radius: var(--onyom-radius-md);
+}
+
+.scriptFallback h5 {
+  margin: 0 0 var(--onyom-space-3) 0;
   font-size: 1rem;
+  font-weight: 600;
+  color: var(--onyom-text-primary);
 }
 
-/* Dark theme adjustments */
-.dark .player {
-  background: rgba(var(--bg-secondary-rgb), 0.95);
-  border-color: var(--border-primary);
+.scriptFallback p {
+  margin: 0;
+  color: var(--onyom-text-secondary);
+  line-height: 1.6;
+  font-size: 0.9rem;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
+/* Loading Spinner */
+.loading {
+  position: relative;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--onyom-border-soft);
+  border-top: 2px solid var(--onyom-accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
   .player {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: 1rem 1rem 0 0;
-    max-width: none;
+    padding: var(--onyom-space-3);
   }
-
-  .playerContent {
-    padding: 1rem;
+  
+  .volumeContainer {
+    display: none; /* Hide volume controls on small screens */
   }
-
-  .title {
-    font-size: 1rem;
-  }
-
+  
   .controls {
-    flex-direction: column;
-    gap: 1rem;
+    gap: var(--onyom-space-3);
   }
-
-  .volumeControl {
-    width: 100%;
-    justify-content: center;
-    min-width: auto;
-  }
-
-  .soundOptions {
-    justify-content: center;
-  }
-
-  .metadata {
-    gap: 0.5rem;
+  
+  .volumeSlider {
+    width: 60px;
   }
 }
 
-/* Animations */
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .player {
+    animation: none;
   }
-  50% {
-    opacity: 0.7;
+  
+  .controlButton,
+  .playButton,
+  .volumeButton,
+  .progressThumb,
+  .progressFill,
+  .progressColorLayer,
+  .volumeSlider::-webkit-slider-thumb {
+    transition: none;
   }
-}
-
-.playButton:not(:disabled):hover {
-  transform: scale(1.05);
-}
-
-.stopButton:not(:disabled):hover {
-  transform: scale(1.05);
+  
+  .progressFill::after,
+  .progressColorLayer::before {
+    animation: none;
+  }
 } 

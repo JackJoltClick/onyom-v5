@@ -1,311 +1,230 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { IoPlay, IoPause, IoSparkles, IoFlower } from 'react-icons/io5'
 import { MeditationCard } from '@/components/meditation/MeditationCard'
-import { Button } from '@/components/ui/Button'
 import { useMeditationStore } from '@/stores/meditationStore'
-import { useAuth } from '@/hooks/useAuth'
-import { useTheme } from '@/contexts/ThemeContext'
-import { useChatSession, useChats } from '@/hooks/useChat'
-import { useChatStore } from '@/stores/chatStore'
-import { MeditationService } from '@/services/meditationService'
 import { MEDITATION_CONFIG } from '@/lib/constants'
-import type { MeditationTab, MeditationCategory } from '@/types'
+import type { MeditationCategory } from '@/types'
 import styles from '@/styles/pages/MeditationsPage.module.css'
 
 export function MeditationsPage(): React.ReactElement {
-  const { user } = useAuth()
-  const { isDark } = useTheme()
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [generateError, setGenerateError] = useState<string | null>(null)
-  
-  // Chat data
-  const currentChatId = useChatStore((state) => state.currentChatId)
-  const { messages } = useChatSession(currentChatId || undefined)
-  const { data: chats } = useChats()
+  const [selectedCategory, setSelectedCategory] = useState<MeditationCategory | 'all'>('all')
+  const [showAllCategories, setShowAllCategories] = useState(false)
   
   // Meditation store state
-  const activeTab = useMeditationStore((state) => state.activeTab)
-  const selectedCategory = useMeditationStore((state) => state.selectedCategory)
   const meditations = useMeditationStore((state) => state.meditations)
-  const generatedMeditations = useMeditationStore((state) => state.generatedMeditations)
-  const progress = useMeditationStore((state) => state.progress)
-  const currentMeditation = useMeditationStore((state) => state.player.currentMeditation)
-  
-  // Actions
-  const setActiveTab = useMeditationStore((state) => state.setActiveTab)
-  const setSelectedCategory = useMeditationStore((state) => state.setSelectedCategory)
+  const player = useMeditationStore((state) => state.player)
+  const loadMeditations = useMeditationStore((state) => state.loadMeditations)
+  const playMeditation = useMeditationStore((state) => state.playMeditation)
 
-  // Filter meditations based on selected category
+  // Load meditations on mount
+  useEffect(() => {
+    loadMeditations()
+  }, [loadMeditations])
+
+  // Filter meditations
   const filteredMeditations = useMemo(() => {
     if (selectedCategory === 'all') return meditations
     return meditations.filter(m => m.category === selectedCategory)
   }, [meditations, selectedCategory])
 
-  // Tab definitions
-  const tabs: { id: MeditationTab; label: string; icon: string }[] = [
-    { id: 'library', label: 'Library', icon: '📚' },
-    { id: 'for-you', label: 'For You', icon: '✨' },
-    { id: 'progress', label: 'Progress', icon: '📊' }
-  ]
+  // Get featured meditation (first one or currently playing)
+  const featuredMeditation = player.currentMeditation || filteredMeditations[0]
+  const otherMeditations = filteredMeditations.filter(m => m.id !== featuredMeditation?.id)
 
-  const handleGenerateMeditation = async () => {
-    if (!user || !messages || messages.length === 0) {
-      setGenerateError('Please have a conversation with your therapist first')
-      return
-    }
+  const handleMeditationSelect = (meditation: any) => {
+    playMeditation(meditation)
+  }
 
-    setIsGenerating(true)
-    setGenerateError(null)
-
-    try {
-      await MeditationService.generateAndStore(
-        messages, 
-        user.therapist_tone
-      )
-      
-      // Success! The meditation is now in the store
-      console.log('Successfully generated personalized meditation')
-      
-    } catch (error) {
-      console.error('Failed to generate meditation:', error)
-      setGenerateError(error instanceof Error ? error.message : 'Failed to generate meditation')
-    } finally {
-      setIsGenerating(false)
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
     }
   }
 
-  // Check if meditation can be suggested
-  const canSuggestMeditation = messages && MeditationService.shouldSuggestMeditation(messages)
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 12
+      }
+    }
+  }
 
   return (
-    <div className={styles.container}>
+    <motion.div 
+      className={styles.container}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Header */}
-      <header className={styles.header}>
+      <motion.header className={styles.header} variants={itemVariants}>
         <div className={styles.headerContent}>
-          <div className={styles.titleSection}>
-            <h1 className={styles.title}>Meditations</h1>
-            <p className={styles.subtitle}>
-              Find peace and clarity with guided practices
-            </p>
-          </div>
-          
-          {currentMeditation && (
-            <motion.div 
-              className={styles.nowPlaying}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <span className={styles.nowPlayingIcon}>🎵</span>
-              <span className={styles.nowPlayingText}>
-                Now Playing: {currentMeditation.title}
-              </span>
-            </motion.div>
-          )}
+          <h1 className={styles.title}>Find Your Peace</h1>
+          <p className={styles.subtitle}>
+            Guided meditations to calm your mind and soothe your soul
+          </p>
         </div>
+      </motion.header>
 
-        {/* Tab Navigation */}
-        <nav className={styles.tabNav}>
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`${styles.tab} ${activeTab === tab.id ? styles.active : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <span className={styles.tabIcon}>{tab.icon}</span>
-              <span className={styles.tabLabel}>{tab.label}</span>
-              {tab.id === 'for-you' && generatedMeditations.length > 0 && (
-                <span className={styles.badge}>{generatedMeditations.length}</span>
-              )}
-            </button>
-          ))}
-        </nav>
-      </header>
-
-      {/* Content */}
+      {/* Main Content */}
       <main className={styles.main}>
-        <AnimatePresence mode="wait">
-          {/* Library Tab */}
-          {activeTab === 'library' && (
-            <motion.div
-              key="library"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={styles.tabContent}
-            >
-              {/* Category Filter */}
-              <div className={styles.filterSection}>
-                <h3 className={styles.filterTitle}>Categories</h3>
-                <div className={styles.categoryFilters}>
-                  <button
-                    className={`${styles.categoryFilter} ${selectedCategory === 'all' ? styles.active : ''}`}
-                    onClick={() => setSelectedCategory('all')}
+        {/* Hero Meditation */}
+        {featuredMeditation && (
+          <motion.section className={styles.heroSection} variants={itemVariants}>
+            <div className={styles.heroCard}>
+              <div className={styles.heroContent}>
+                <div className={styles.heroMeta}>
+                  <span className={styles.heroCategory}>
+                    {(() => {
+                      const IconComponent = MEDITATION_CONFIG.categories[featuredMeditation.category]?.icon
+                      return IconComponent ? <IconComponent size={16} /> : null
+                    })()}
+                    {MEDITATION_CONFIG.categories[featuredMeditation.category]?.name}
+                  </span>
+                  <span className={styles.heroDuration}>
+                    {featuredMeditation.duration_minutes} min
+                  </span>
+                </div>
+                
+                <h2 className={styles.heroTitle}>{featuredMeditation.title}</h2>
+                <p className={styles.heroDescription}>{featuredMeditation.description}</p>
+                
+                <div className={styles.heroActions}>
+                  <motion.button
+                    className={styles.heroPlayButton}
+                    onClick={() => handleMeditationSelect(featuredMeditation)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <span className={styles.categoryIcon}>🌟</span>
-                    <span>All</span>
-                  </button>
-                  
-                  {Object.entries(MEDITATION_CONFIG.categories).map(([key, config]) => (
-                    <button
-                      key={key}
-                      className={`${styles.categoryFilter} ${selectedCategory === key ? styles.active : ''}`}
-                      onClick={() => setSelectedCategory(key as MeditationCategory)}
-                    >
-                      <span className={styles.categoryIcon}>{config.icon}</span>
-                      <span>{config.name}</span>
-                    </button>
-                  ))}
+                    <span className={styles.playIcon}>
+                      {player.currentMeditation?.id === featuredMeditation.id && player.isPlaying ? (
+                        <IoPause size={20} />
+                      ) : (
+                        <IoPlay size={20} />
+                      )}
+                    </span>
+                    {player.currentMeditation?.id === featuredMeditation.id && player.isPlaying ? 'Pause' : 'Start Session'}
+                  </motion.button>
+                </div>
+
+                <div className={styles.heroInstructor}>
+                  <span>with {featuredMeditation.instructor}</span>
                 </div>
               </div>
 
-              {/* Meditation Grid */}
-              <div className={styles.meditationsGrid}>
-                {filteredMeditations.map((meditation) => (
-                  <MeditationCard 
-                    key={meditation.id} 
-                    meditation={meditation}
-                  />
-                ))}
+              <div className={styles.heroVisual}>
+                <div className={styles.heroGradient}></div>
+                <div className={styles.heroPattern}></div>
               </div>
+            </div>
+          </motion.section>
+        )}
 
-              {filteredMeditations.length === 0 && (
-                <div className={styles.emptyState}>
-                  <span className={styles.emptyIcon}>🔍</span>
-                  <h3>No meditations found</h3>
-                  <p>Try selecting a different category</p>
-                </div>
-              )}
-            </motion.div>
-          )}
-
-          {/* For You Tab */}
-          {activeTab === 'for-you' && (
-            <motion.div
-              key="for-you"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={styles.tabContent}
+        {/* Category Navigation */}
+        <motion.section className={styles.categorySection} variants={itemVariants}>
+          <div className={styles.categoryHeader}>
+            <h3 className={styles.categoryTitle}>Explore by mood</h3>
+            <button 
+              className={styles.categoryToggle}
+              onClick={() => setShowAllCategories(!showAllCategories)}
             >
-              <div className={styles.personalizedSection}>
-                <div className={styles.personalizedHeader}>
-                  <h3>Personalized Meditations</h3>
-                  <p>Meditations created just for you based on your therapy conversations</p>
-                  
-                  {canSuggestMeditation && (
-                    <div className={styles.suggestionBanner}>
-                      <span>💫</span>
-                      <span>{MeditationService.getMeditationSuggestionMessage()}</span>
-                    </div>
-                  )}
-                </div>
+              {showAllCategories ? 'Show less' : 'View all'}
+            </button>
+          </div>
 
-                <Button 
-                  onClick={handleGenerateMeditation}
-                  disabled={isGenerating || !messages || messages.length === 0}
-                  className={styles.generateButton}
-                >
-                  <span>✨</span>
-                  {isGenerating ? 'Generating...' : 'Generate New Meditation'}
-                </Button>
+          <div className={styles.categoryContainer}>
+            <motion.button
+              className={`${styles.categoryChip} ${selectedCategory === 'all' ? styles.active : ''}`}
+              onClick={() => setSelectedCategory('all')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <IoSparkles className={styles.categoryIcon} size={16} />
+              <span>All</span>
+            </motion.button>
+            
+            {Object.entries(MEDITATION_CONFIG.categories)
+              .slice(0, showAllCategories ? undefined : 4)
+              .map(([key, config]) => {
+                const IconComponent = config.icon
+                return (
+                  <motion.button
+                    key={key}
+                    className={`${styles.categoryChip} ${selectedCategory === key ? styles.active : ''}`}
+                    onClick={() => setSelectedCategory(key as MeditationCategory)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <IconComponent className={styles.categoryIcon} size={16} />
+                    <span>{config.name}</span>
+                  </motion.button>
+                )
+              })}
+          </div>
+        </motion.section>
 
-                {generateError && (
-                  <div className={styles.errorMessage}>
-                    <span>⚠️ {generateError}</span>
-                  </div>
-                )}
-
-                {!messages || messages.length === 0 && (
-                  <div className={styles.infoMessage}>
-                    <span>💬 Start a conversation with your therapist to generate personalized meditations</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Generated Meditations */}
-              {generatedMeditations.length > 0 ? (
-                <div className={styles.meditationsGrid}>
-                  {generatedMeditations.map((meditation, index) => (
+        {/* Meditation Collection */}
+        {otherMeditations.length > 0 && (
+          <motion.section className={styles.collectionSection} variants={itemVariants}>
+            <h3 className={styles.collectionTitle}>
+              {selectedCategory === 'all' ? 'More meditations' : `More ${MEDITATION_CONFIG.categories[selectedCategory as MeditationCategory]?.name.toLowerCase()}`}
+            </h3>
+            
+            <div className={styles.meditationGrid}>
+              <AnimatePresence>
+                {otherMeditations.map((meditation, index) => (
+                  <motion.div
+                    key={meditation.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{
+                      delay: index * 0.05,
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 12
+                    }}
+                  >
                     <MeditationCard 
-                      key={`generated-${index}`} 
                       meditation={meditation}
+                      onSelect={handleMeditationSelect}
+                      isSelected={player.currentMeditation?.id === meditation.id}
+                      variant="minimal"
                     />
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.emptyState}>
-                  <span className={styles.emptyIcon}>🌱</span>
-                  <h3>No personalized meditations yet</h3>
-                  <p>
-                    After a few therapy conversations, we'll create custom 
-                    meditations tailored to your needs and current state of mind.
-                  </p>
-                </div>
-              )}
-            </motion.div>
-          )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </motion.section>
+        )}
 
-          {/* Progress Tab */}
-          {activeTab === 'progress' && (
-            <motion.div
-              key="progress"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={styles.tabContent}
+        {/* Empty State */}
+        {filteredMeditations.length === 0 && (
+          <motion.div className={styles.emptyState} variants={itemVariants}>
+            <IoFlower className={styles.emptyIcon} size={48} />
+            <h3>No meditations found</h3>
+            <p>Try exploring a different mood or category</p>
+            <button 
+              className={styles.emptyAction}
+              onClick={() => setSelectedCategory('all')}
             >
-              <div className={styles.progressContent}>
-                <div className={styles.statsGrid}>
-                  <div className={styles.statCard}>
-                    <span className={styles.statIcon}>🧘</span>
-                    <div className={styles.statInfo}>
-                      <span className={styles.statNumber}>{progress.total_sessions}</span>
-                      <span className={styles.statLabel}>Sessions</span>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.statCard}>
-                    <span className={styles.statIcon}>⏰</span>
-                    <div className={styles.statInfo}>
-                      <span className={styles.statNumber}>{Math.round(progress.total_minutes)}</span>
-                      <span className={styles.statLabel}>Minutes</span>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.statCard}>
-                    <span className={styles.statIcon}>🔥</span>
-                    <div className={styles.statInfo}>
-                      <span className={styles.statNumber}>{progress.current_streak}</span>
-                      <span className={styles.statLabel}>Day Streak</span>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.statCard}>
-                    <span className={styles.statIcon}>🎯</span>
-                    <div className={styles.statInfo}>
-                      <span className={styles.statNumber}>{Math.round(progress.average_session_duration)}</span>
-                      <span className={styles.statLabel}>Avg Minutes</span>
-                    </div>
-                  </div>
-                </div>
-
-                {progress.total_sessions === 0 && (
-                  <div className={styles.emptyState}>
-                    <span className={styles.emptyIcon}>📈</span>
-                    <h3>Start your meditation journey</h3>
-                    <p>
-                      Begin with a meditation session to see your progress and statistics here.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              View all meditations
+            </button>
+          </motion.div>
+        )}
       </main>
-    </div>
+    </motion.div>
   )
 } 

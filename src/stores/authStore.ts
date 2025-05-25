@@ -14,10 +14,11 @@ interface AuthState {
   setUser: (user: UserProfile | null) => void
   setLoading: (loading: boolean) => void
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string) => Promise<{ needsEmailVerification: boolean }>
   signOut: () => Promise<void>
   updateProfile: (updates: Partial<UserProfile>) => Promise<void>
   initialize: () => Promise<void>
+  resendVerificationEmail: (email: string) => Promise<void>
 }
 
 // Track if we're already loading a profile to prevent duplicates
@@ -39,15 +40,37 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ isLoading: true })
           
+          if (!isSupabaseConfigured) {
+            // Development fallback - simulate successful signin
+            console.log('AuthStore: Supabase not configured, simulating signin...')
+            await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate network delay
+            
+            const mockUser = {
+              id: `mock-${Date.now()}`,
+              email,
+              name: '', // Empty name to trigger onboarding
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              avatar_url: null,
+              therapist_tone: 'supportive' as const,
+              theme_preference: 'dark' as const,
+              typing_speed: 50
+            }
+            
+            set({ user: mockUser, isLoading: false })
+            console.log('AuthStore: Mock signin successful')
+            return
+          }
+
           const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
           })
 
           if (error) throw new Error(error.message)
-          
-          // Auth state change listener will handle setting the user
-          // via the loadUserProfile function
+          if (!data.user) throw new Error('No user returned from sign in')
+
+          await loadUserProfileWithTimeout(data.user.id, set)
         } catch (error) {
           set({ isLoading: false })
           throw error
@@ -58,14 +81,46 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ isLoading: true })
           
-          const { error } = await supabase.auth.signUp({
+          if (!isSupabaseConfigured) {
+            // Development fallback - simulate successful signup
+            console.log('AuthStore: Supabase not configured, simulating signup...')
+            await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate network delay
+            
+            const mockUser = {
+              id: `mock-${Date.now()}`,
+              email,
+              name: '', // Empty name to trigger onboarding
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              avatar_url: null,
+              therapist_tone: 'supportive' as const,
+              theme_preference: 'dark' as const,
+              typing_speed: 50
+            }
+            
+            console.log('AuthStore: Setting mock user:', mockUser)
+            set({ user: mockUser, isLoading: false })
+            console.log('AuthStore: Mock signup successful, user state updated')
+            return { needsEmailVerification: false }
+          }
+          
+          const { data, error } = await supabase.auth.signUp({
             email,
             password,
           })
 
           if (error) throw new Error(error.message)
           
-          set({ isLoading: false })
+          // If user is created and confirmed immediately (no email confirmation required)
+          if (data.user && data.session) {
+            console.log('AuthStore: User signed up and confirmed, loading profile...')
+            await loadUserProfileWithTimeout(data.user.id, set)
+            return { needsEmailVerification: false }
+          } else {
+            console.log('AuthStore: User signed up, waiting for email confirmation...')
+            set({ isLoading: false })
+            return { needsEmailVerification: true }
+          }
         } catch (error) {
           set({ isLoading: false })
           throw error
@@ -161,6 +216,33 @@ export const useAuthStore = create<AuthState>()(
           set({ isInitialized: true, isLoading: false })
         }
       },
+
+      resendVerificationEmail: async (email: string) => {
+        try {
+          set({ isLoading: true })
+          console.log('AuthStore: Resending verification email...')
+          
+          if (!isSupabaseConfigured) {
+            console.log('AuthStore: Supabase not configured, skipping resend verification email')
+            set({ isLoading: false })
+            return
+          }
+          
+          const { data, error } = await supabase.auth.resend({
+            type: 'signup',
+            email: email
+          })
+
+          if (error) throw new Error(error.message)
+          
+          console.log('AuthStore: Verification email resend successful')
+          set({ isLoading: false })
+        } catch (error) {
+          console.error('AuthStore: Error resending verification email:', error)
+          set({ isLoading: false })
+          throw error
+        }
+      },
     }),
     {
       name: 'auth-storage',
@@ -168,6 +250,9 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isInitialized: state.isInitialized 
       }),
+      onRehydrateStorage: () => (state) => {
+        console.log('AuthStore: Rehydrating from storage:', state)
+      },
     }
   )
 )

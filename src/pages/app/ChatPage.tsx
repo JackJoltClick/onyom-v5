@@ -1,21 +1,22 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { IoAdd, IoTrash, IoSparkles, IoWarning } from 'react-icons/io5'
 import { ChatBubble } from '@/components/chat/ChatBubble'
 import { ChatInput } from '@/components/chat/ChatInput'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/hooks/useAuth'
-import { useTheme } from '@/contexts/ThemeContext'
 import { useChatSession, useCreateChatSession, useChats } from '@/hooks/useChat'
 import { useChatStore } from '@/stores/chatStore'
-import { THERAPIST_PERSONALITIES, STORAGE_KEYS } from '@/lib/constants'
+import { THERAPIST_PERSONALITIES } from '@/lib/constants'
 import { isOpenAIAvailable } from '@/lib/openai'
+import { isSupabaseConfigured } from '@/lib/supabase'
 import styles from '@/styles/components/ChatPage.module.css'
 
 export function ChatPage(): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams()
+  const [sendError, setSendError] = useState<string | null>(null)
   const { user } = useAuth()
-  const { setTheme, isDark } = useTheme()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
 
@@ -74,43 +75,70 @@ export function ChatPage(): React.ReactElement {
   }, [currentChatId, chats, createChatSession.isPending, setCurrentChatId])
 
   const handleSendMessage = async (content: string): Promise<void> => {
-    setIsTyping(true)
-
+    if (!content.trim()) return
+    
     try {
+      setSendError(null)
+      
+      // Check if we have a valid chat session
       if (!currentChatId) {
-        // Create new chat session with first message
-        const result = await new Promise<{ chat: { id: string } }>((resolve, reject) => {
-          createChatSession.mutate(
-            { firstMessage: content, therapistTone },
-            {
-              onSuccess: resolve,
-              onError: reject,
-            }
-          )
-        })
-        
-        setCurrentChatId(result.chat.id)
-      } else {
-        // Send message to existing chat
-        await new Promise<void>((resolve, reject) => {
-          sendMessage(
-            {
-              chatId: currentChatId,
-              content,
-              therapistTone,
-              conversationHistory,
-            },
-            {
-              onSuccess: () => resolve(),
-              onError: reject,
-            }
-          )
-        })
+        console.error('No chat ID available')
+        setSendError('No active chat session. Please create a new chat.')
+        return
       }
+
+      console.log('Attempting to send message to chat:', currentChatId)
+      console.log('User authenticated:', !!user)
+      console.log('User ID:', user?.id)
+      
+      await sendMessage(
+        {
+          chatId: currentChatId,
+          content,
+          therapistTone,
+          conversationHistory,
+        },
+        {
+          onSuccess: () => {
+            console.log('Message sent successfully')
+          },
+          onError: (error: any) => {
+            console.error('Error sending message:', error)
+            
+            // Provide specific error messages based on the error
+            if (error.message?.includes('Chat not found')) {
+              setSendError('This chat session no longer exists. Please create a new chat.')
+            } else if (error.message?.includes('not authenticated')) {
+              setSendError('You need to be logged in to send messages.')
+            } else if (error.message?.includes('Database access denied')) {
+              setSendError('Database connection issue. Please check your setup and try again.')
+            } else if (error.message?.includes('Row-level security')) {
+              setSendError('Permission denied. Please check your account setup.')
+            } else if (error.message?.includes('406')) {
+              setSendError('Database configuration error. Please check the setup guide.')
+            } else {
+              setSendError(error.message || 'Failed to send message. Please try again.')
+            }
+          }
+        }
+      )
     } catch (error) {
       console.error('Error sending message:', error)
-    } finally {
-      setIsTyping(false)
+      
+      // Set user-friendly error message
+      if (error instanceof Error) {
+        if (error.message.includes('row-level security')) {
+          setSendError('Database access denied. Please check your account setup.')
+        } else if (error.message.includes('foreign key')) {
+          setSendError('Database setup incomplete. Please contact support.')
+        } else if (error.message.includes('User profile not found')) {
+          setSendError('Please complete your profile setup first.')
+        } else {
+          setSendError(error.message)
+        }
+      } else {
+        setSendError('Failed to send message. Please try again.')
+      }
     }
   }
 
@@ -122,10 +150,6 @@ export function ChatPage(): React.ReactElement {
     }
   }
 
-  const handleThemeToggle = (): void => {
-    setTheme(isDark ? 'light' : 'dark')
-  }
-
   const handleNewChat = (): void => {
     clearCurrentChat()
     setSearchParams({})
@@ -133,17 +157,41 @@ export function ChatPage(): React.ReactElement {
 
   const openAIStatus = isOpenAIAvailable()
   const hasMessages = messages.length > 0
+  const supabaseConfigured = isSupabaseConfigured
 
   return (
-    <div className={styles.container}>
+    <motion.div 
+      className={styles.container}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Configuration Warning */}
+      {!supabaseConfigured && (
+        <motion.div 
+          className={styles.configWarning}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <IoWarning size={16} />
+          <span>Database not configured. Please set up your Supabase credentials.</span>
+        </motion.div>
+      )}
+
       {/* Header */}
-      <header className={styles.header}>
+      <motion.header 
+        className={styles.header}
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.1 }}
+      >
         <div className={styles.headerContent}>
           <div className={styles.headerInfo}>
             <h1 className={styles.title}>
-              {chat?.title || 'Therapy Chat'}
+              {chat?.title || 'Therapy Session'}
             </h1>
             <p className={styles.subtitle}>
+              <IoSparkles size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
               {personality.tone.charAt(0).toUpperCase() + personality.tone.slice(1)} Therapist
               {openAIStatus ? ' • AI Powered' : ' • Demo Mode'}
               {hasMessages && ` • ${messages.length} messages`}
@@ -158,16 +206,7 @@ export function ChatPage(): React.ReactElement {
               aria-label="New chat"
               title="Start new conversation"
             >
-              ➕
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleThemeToggle}
-              aria-label="Toggle theme"
-            >
-              {isDark ? '☀️' : '🌙'}
+              <IoAdd size={18} />
             </Button>
             
             {currentChatId && (
@@ -178,41 +217,81 @@ export function ChatPage(): React.ReactElement {
                 aria-label="Delete chat"
                 title="Delete this conversation"
               >
-                🗑️
+                <IoTrash size={16} />
               </Button>
             )}
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Chat Messages */}
       <main className={styles.chatContainer} ref={chatContainerRef}>
         <div className={styles.messagesContainer}>
           {/* Welcome message when no chat selected */}
           {showWelcome && (
-            <div className={styles.welcomeMessage}>
+            <motion.div 
+              className={styles.welcomeMessage}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <div className={styles.welcomeContent}>
                 <h2>Welcome to your therapy space</h2>
                 <p>
                   I'm your {personality.tone} therapist, here to listen and support you.
                   What would you like to talk about today?
                 </p>
+                {!supabaseConfigured && (
+                  <div className={styles.setupNote}>
+                    <IoWarning size={16} />
+                    <span>Note: Database not configured. Messages won't be saved.</span>
+                  </div>
+                )}
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Loading state */}
           {isLoading && (
-            <div className={styles.loadingMessage}>
+            <motion.div 
+              className={styles.loadingMessage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
               <span>Loading conversation...</span>
-            </div>
+            </motion.div>
           )}
 
           {/* Error state */}
           {error && (
-            <div className={styles.errorMessage}>
-              <span>⚠️ Error loading conversation. Please try again.</span>
-            </div>
+            <motion.div 
+              className={styles.errorMessage}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <IoWarning size={16} />
+              <span>Error loading conversation. Please try again.</span>
+            </motion.div>
+          )}
+
+          {/* Send Error */}
+          {sendError && (
+            <motion.div 
+              className={styles.sendErrorMessage}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <IoWarning size={16} />
+              <span>{sendError}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSendError(null)}
+                aria-label="Dismiss error"
+              >
+                ×
+              </Button>
+            </motion.div>
           )}
 
           {/* Messages */}
@@ -223,7 +302,10 @@ export function ChatPage(): React.ReactElement {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                transition={{ 
+                  duration: 0.3,
+                  delay: index * 0.05
+                }}
               >
                 <ChatBubble
                   message={message}
@@ -271,6 +353,6 @@ export function ChatPage(): React.ReactElement {
             : `Continue your conversation with your ${therapistTone} therapist...`
         }
       />
-    </div>
+    </motion.div>
   )
 } 

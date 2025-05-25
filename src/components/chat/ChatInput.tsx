@@ -11,7 +11,9 @@ export function ChatInput({
   className,
 }: ChatInputProps): React.ReactElement {
   const [message, setMessage] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
@@ -20,6 +22,7 @@ export function ChatInput({
     if (trimmedMessage && !disabled) {
       onSendMessage(trimmedMessage)
       setMessage('')
+      setIsTyping(false)
       
       // Reset textarea height
       if (textareaRef.current) {
@@ -39,6 +42,21 @@ export function ChatInput({
     const value = e.target.value
     setMessage(value)
     
+    // Show typing indicator
+    setIsTyping(value.length > 0)
+    
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+    
+    // Hide typing indicator after 1 second of no typing
+    if (value.length > 0) {
+      typingTimeoutRef.current = setTimeout(() => {
+        setIsTyping(false)
+      }, 1000)
+    }
+    
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
@@ -53,11 +71,23 @@ export function ChatInput({
     }
   }, [disabled])
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const canSend = message.trim().length > 0 && !disabled
+  const characterCount = message.length
+  const isNearLimit = characterCount > 800
+  const isAtLimit = characterCount >= 1000
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.container} ${className || ''}`}>
-      <div className={styles.inputWrapper}>
+      <div className={`${styles.inputWrapper} ${isTyping ? styles.typing : ''}`}>
         <textarea
           ref={textareaRef}
           value={message}
@@ -93,9 +123,9 @@ export function ChatInput({
         </Button>
       </div>
       
-      {message.length > 900 && (
-        <div className={styles.counter}>
-          {message.length}/1000
+      {characterCount > 700 && (
+        <div className={`${styles.counter} ${isNearLimit ? styles.warning : ''} ${isAtLimit ? styles.error : ''}`}>
+          {characterCount}/1000
         </div>
       )}
     </form>

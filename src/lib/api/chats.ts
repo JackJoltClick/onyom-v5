@@ -173,11 +173,47 @@ export const messageApi = {
    * Send a new message
    */
   async sendMessage(chatId: string, content: string, sender: 'user' | 'assistant'): Promise<Message> {
+    console.log('=== Sending Message Debug ===')
+    console.log('Chat ID:', chatId)
+    console.log('Content length:', content.length)
+    console.log('Sender:', sender)
+    
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    console.log('Current user:', user?.id)
+    console.log('User error:', userError)
+    
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
+
+    // Verify user has access to this chat
+    const { data: chatData, error: chatError } = await supabase
+      .from('chats')
+      .select('user_id')
+      .eq('id', chatId)
+      .single()
+
+    console.log('Chat verification:', { chatData, chatError })
+
+    if (chatError) {
+      if (chatError.code === 'PGRST116') {
+        throw new Error('Chat not found')
+      }
+      console.error('Chat verification error:', chatError)
+      throw new Error('Failed to verify chat access')
+    }
+
+    if (chatData.user_id !== user.id) {
+      throw new Error('Access denied: You do not own this chat')
+    }
+
     const messageData: MessageInsert = {
       chat_id: chatId,
       content: content,
       sender: sender,
     }
+
+    console.log('Message data to insert:', messageData)
 
     const { data, error } = await supabase
       .from('messages')
@@ -187,8 +223,27 @@ export const messageApi = {
 
     if (error) {
       console.error('Error sending message:', error)
-      throw new Error('Failed to send message')
+      console.error('Detailed error info:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      })
+      
+      // Provide specific error messages based on error type
+      if (error.code === '23503') {
+        throw new Error('Chat not found or access denied')
+      } else if (error.code === '42501') {
+        throw new Error('Database access denied. Please check your account setup.')
+      } else if (error.message.includes('row-level security')) {
+        throw new Error('Access denied: Row-level security policy violation')
+      } else {
+        throw new Error(`Failed to send message: ${error.message}`)
+      }
     }
+
+    console.log('Message sent successfully:', data)
+    console.log('========================')
 
     // Update chat's updated_at timestamp
     // TODO: Uncomment when updated_at column exists in database
