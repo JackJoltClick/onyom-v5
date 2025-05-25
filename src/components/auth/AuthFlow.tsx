@@ -92,7 +92,7 @@ export function AuthFlow({ mode, onComplete }: AuthFlowProps): React.ReactElemen
       onBack: handleBack,
       onError: handleError,
       error,
-      onComplete
+      onComplete: onComplete || (() => {})
     }
 
     switch (currentStep) {

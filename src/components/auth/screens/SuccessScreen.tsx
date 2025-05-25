@@ -33,9 +33,9 @@ export function SuccessScreen({ mode, authData, onComplete }: SuccessScreenProps
       for (let i = 0; i < 50; i++) {
         const confetti = document.createElement('div')
         confetti.className = styles.confetti ?? 'confetti-particle'
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]
         confetti.style.left = Math.random() * 100 + '%'
         confetti.style.animationDelay = Math.random() * 3 + 's'
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]
         confetti.style.animationDuration = (Math.random() * 3 + 2) + 's'
         confettiContainer.appendChild(confetti)
       }

@@ -11,19 +11,18 @@ interface EmailVerificationScreenProps {
   authData: AuthData
   onNext: (step: AuthStep, data?: Partial<AuthData>) => void
   onBack: () => void
-  onError: (error: string) => void
+  onError: (message: string) => void
   error: string | null
-  onComplete?: () => void | undefined
+  onComplete?: () => void
 }
 
-export function EmailVerificationScreen({ 
-  authData, 
-  onNext, 
-  onBack, 
+export function EmailVerificationScreen({
+  authData,
+  onBack,
   onError,
   error,
-  onComplete 
-}: EmailVerificationScreenProps): React.ReactElement {
+  onComplete
+}: EmailVerificationScreenProps) {
   const [isResending, setIsResending] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
   const [isChecking, setIsChecking] = useState(false)
